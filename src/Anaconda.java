@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package edu.wpi.first.wpilibj.templates;
+
 
 
 import edu.wpi.first.wpilibj.SimpleRobot;
@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.SimpleRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class RobotTemplate extends SimpleRobot {
+public class Anaconda extends SimpleRobot {
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
