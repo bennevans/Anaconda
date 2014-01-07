@@ -6,10 +6,8 @@
 
 package modules;
 
-import Config;
-import Config;
+import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
-
 /**
  *
  * @author Ben Evans
@@ -24,6 +22,8 @@ public class DriveModule extends Module{
     private boolean manual = true;
     private PIDController angleController;
     private PIDOutput angleOutput;
+    private double leftPower = 0, rightPower = 0;
+    private double targetAngle = 0;
     
     public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist, int gyroc){
         lVictor1 = new Victor(lv1);
@@ -37,7 +37,7 @@ public class DriveModule extends Module{
         gyro = new Gyro(gyroc);
         
         angleOutput = new DriveOutput();
-        angleController = new PIDController(Config.GYRO_P, Config.GYRO_I, Config.GYRO_D, gyro, angleOutput);
+        angleController = new PIDController(DriveConfig.GYRO_P, DriveConfig.GYRO_I, DriveConfig.GYRO_D, gyro, angleOutput);
         
         setupEncoders();
 //        pidSource = new PIDSource();

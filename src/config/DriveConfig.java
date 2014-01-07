@@ -1,10 +1,12 @@
+package config;
+
 
 /**
  *
  * @author Robotics
  */
-public class Config {
-    //Drive Variables
+public class DriveConfig {
+    //Input and output
     public static final int LEFT_VICTOR_ONE = 0;
     public static final int LEFT_VICTOR_TWO = 0;
     public static final int RIGHT_VICTOR_ONE = 0;
