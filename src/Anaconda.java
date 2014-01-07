@@ -8,7 +8,8 @@
 
 
 
-import edu.wpi.first.wpilibj.SimpleRobot;
+
+import edu.wpi.first.wpilibj.IterativeRobot;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -17,25 +18,7 @@ import edu.wpi.first.wpilibj.SimpleRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Anaconda extends SimpleRobot {
-    /**
-     * This function is called once each time the robot enters autonomous mode.
-     */
-    public void autonomous() {
-        
-    }
-
-    /**
-     * This function is called once each time the robot enters operator control.
-     */
-    public void operatorControl() {
-
-    }
+public class Anaconda extends IterativeRobot {    
     
-    /**
-     * This function is called once each time the robot enters test mode.
-     */
-    public void test() {
     
-    }
 }

@@ -6,6 +6,8 @@
 
 package modules;
 
+import Config;
+import Config;
 import edu.wpi.first.wpilibj.*;
 
 /**
@@ -19,9 +21,9 @@ public class DriveModule extends Module{
     private Encoder lEncoder, rEncoder;
     private double distancePerPulse;
     private Gyro gyro;
-    private PIDSource pidSource;
-    private PIDOutput pidOutput;
-    private PIDController pid;
+    private boolean manual = true;
+    private PIDController angleController;
+    private PIDOutput angleOutput;
     
     public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist, int gyroc){
         lVictor1 = new Victor(lv1);
@@ -33,6 +35,9 @@ public class DriveModule extends Module{
         rEncoder = new Encoder(renca, rencb);
         distancePerPulse = dist;
         gyro = new Gyro(gyroc);
+        
+        angleOutput = new DriveOutput();
+        angleController = new PIDController(Config.GYRO_P, Config.GYRO_I, Config.GYRO_D, gyro, angleOutput);
         
         setupEncoders();
 //        pidSource = new PIDSource();
@@ -54,7 +59,38 @@ public class DriveModule extends Module{
         gyro.reset();
     }
     
-    public void run(){
+    private synchronized void setPower(double left, double right){
+        lVictor1.set(left);
+        lVictor2.set(left);
+        rVictor1.set(-right);
+        rVictor2.set(-right);
+    }
+    
+    public synchronized void drive(double left, double right){
         
     }
+    
+    public synchronized double getLeftPower(){
+        return lVictor1.get();
+    }
+    
+    public synchronized double getRightPower(){
+        return rVictor1.get();
+    }
+    
+    public void run(){
+        if(manual){
+            
+        }else{
+            
+        }
+    }
+ 
+    private class DriveOutput implements PIDOutput{
+
+        public void pidWrite(double d) {
+            
+        }
+       
+    }    
 }

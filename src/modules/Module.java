@@ -11,10 +11,14 @@ public class Module implements Runnable{
     
     public Module(){
         controlThread = new Thread(this);
-        controlThread.start();
     }
     
-    public void run(){
-        System.out.println("run() not overloaded");
+    public void start(){
+        controlThread.start();
     }
+
+    public void run(){
+        System.err.println("run() method not overwritten!");
+    }
+    
 }
