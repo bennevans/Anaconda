@@ -19,7 +19,6 @@ public class DriveModule extends Module{
     private Encoder lEncoder, rEncoder;
     private double distancePerPulse;
     private Gyro gyro;
-    private boolean manual = true;
     private PIDController angleController;
     private PIDOutput angleOutput;
     private double leftPower = 0, rightPower = 0;
@@ -79,11 +78,7 @@ public class DriveModule extends Module{
     }
     
     public void run(){
-        if(manual){
-            
-        }else{
-            
-        }
+
     }
  
     private class DriveOutput implements PIDOutput{
