@@ -3,7 +3,7 @@ package config;
 
 /**
  *
- * @author Robotics
+ * @author Ben Evans
  */
 public class DriveConfig {
     //Input and output

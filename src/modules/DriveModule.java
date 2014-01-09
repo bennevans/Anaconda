@@ -39,7 +39,7 @@ public class DriveModule extends Module{
         angleController = new PIDController(DriveConfig.GYRO_P, DriveConfig.GYRO_I, DriveConfig.GYRO_D, gyro, angleOutput);
         
         setupEncoders();
-//        pidSource = new PIDSource();
+        
     }
     
     private synchronized void setupEncoders(){
@@ -78,13 +78,18 @@ public class DriveModule extends Module{
     }
     
     public void run(){
-
+        while(true){
+            if(enabled){
+                if()
+            }
+        }
     }
  
     private class DriveOutput implements PIDOutput{
 
         public void pidWrite(double d) {
-            
+            //not sure if this will work
+            drive(d, -d);
         }
        
     }    
