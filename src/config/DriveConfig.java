@@ -18,5 +18,6 @@ public class DriveConfig {
     
     //PID constants
     public static final int GYRO_P = 0, GYRO_I = 0, GYRO_D = 0;
+    public static final int ENCODER_P = 0, ENCODER_I = 0, ENCODER_D = 0;
     
 }
