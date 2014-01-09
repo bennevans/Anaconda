@@ -18,7 +18,38 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class Anaconda extends IterativeRobot {    
+public class Anaconda extends IterativeRobot {
     
+    public void robotInit(){
+        
+    }
+    
+    public void startCompetition(){
+        
+    }
+    
+    public void disabledInit(){
+        
+    }
+    
+    public void disabledPeriodic(){
+        
+    }
+    
+    public void autonomousInit(){
+        
+    }
+    
+    public void autonomousPeriodic(){
+        
+    }
+    
+    public void teleopInit(){
+        
+    }
+    
+    public void teleopPeriodic(){
+        
+    }
     
 }
