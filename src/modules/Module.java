@@ -23,19 +23,19 @@ public class Module implements Runnable{
         System.err.println("run() method not overwritten!");
     }
     
-    public void enable(){
+    public synchronized void enable(){
         enabled = true;
     }
     
-    public void disable(){
+    public synchronized void disable(){
         enabled = false;
     }
 
-    public void setAutoModeOn(){
+    public synchronized void setAutoModeOn(){
         autoMode = true;
     }
     
-    public void setAutoModeOff(){
+    public synchronized void setAutoModeOff(){
         autoMode = false;
     }
 }
