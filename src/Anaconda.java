@@ -9,7 +9,11 @@
 
 
 
+import config.DriveConfig;
+import config.ShooterConfig;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import modules.DriveModule;
+import modules.ShooterModule;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -19,6 +23,10 @@ import edu.wpi.first.wpilibj.IterativeRobot;
  * directory.
  */
 public class Anaconda extends IterativeRobot {
+    
+    //Modules
+    DriveModule driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
+    ShooterModule shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
     
     public void robotInit(){
         

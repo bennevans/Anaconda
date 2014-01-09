@@ -30,6 +30,10 @@ public class Module implements Runnable{
     public synchronized void disable(){
         enabled = false;
     }
+    
+    public void reset(){
+        System.err.println("reset() not overwritten!");
+    }
 
     public synchronized void setAutoModeOn(){
         autoMode = true;
