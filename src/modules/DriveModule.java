@@ -44,6 +44,9 @@ public class DriveModule extends Module{
         driveOutput = new DriveOutput();
         driveController = new PIDController(DriveConfig.ENCODER_P, DriveConfig.ENCODER_I, DriveConfig.ENCODER_D, encoderSource, driveOutput);
         
+        angleController.setOutputRange(-1.0, 1.0);
+        driveController.setOutputRange(-1.0, 1.0);
+        
     }
     
     private synchronized void setupEncoders(){
@@ -88,6 +91,14 @@ public class DriveModule extends Module{
         return rightPower;
     }
     
+    public synchronized void setVector(double velocity, double angle){
+        angleController.setSetpoint(angle);
+        driveController.setset
+    }
+    
+    //TODO add methods to change pid values
+
+    
     public void run(){
         while(true){
             if(enabled){
@@ -97,7 +108,8 @@ public class DriveModule extends Module{
                     angleController.enable();
                     driveController.enable();
                 }else{
-                    
+                    angleController.disable();
+                    driveController.disable();
                 }
                 
             }else{
@@ -107,8 +119,6 @@ public class DriveModule extends Module{
             Timer.delay(0.05);
         }
     }
-    
-    //TODO add methods to change pid values
  
     private class AngleOutput implements PIDOutput{
 

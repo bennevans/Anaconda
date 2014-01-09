@@ -25,19 +25,25 @@ import modules.ShooterModule;
 public class Anaconda extends IterativeRobot {
     
     //Modules
-    DriveModule driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
-    ShooterModule shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
+    DriveModule driveModule;
+    ShooterModule shooterModule;
     
     public void robotInit(){
+        driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
+        shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
         
     }
     
     public void startCompetition(){
-        
+        driveModule.start();
+        shooterModule.start();
     }
     
     public void disabledInit(){
-        
+        driveModule.disable();
+        shooterModule.disable();
+        driveModule.reset();
+        shooterModule.reset();
     }
     
     public void disabledPeriodic(){
@@ -45,7 +51,8 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void autonomousInit(){
-        
+        shooterModule.enable();
+        driveModule.enable();
     }
     
     public void autonomousPeriodic(){
@@ -53,7 +60,8 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void teleopInit(){
-        
+        shooterModule.enable();
+        driveModule.enable();
     }
     
     public void teleopPeriodic(){
