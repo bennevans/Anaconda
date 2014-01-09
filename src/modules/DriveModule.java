@@ -22,7 +22,7 @@ public class DriveModule extends Module{
     private Gyro gyro;
     private PIDController angleController, distanceController;
     private PIDOutput angleOutput, driveOutput;
-    private double targetAngle, targetDistance;
+    private double leftPower = 0, rightPower = 0;
     
     public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist, int gyroc){
         lVictor1 = new Victor(lv1);
@@ -62,26 +62,32 @@ public class DriveModule extends Module{
         gyro.reset();
     }
     
-    public synchronized void drive(double left, double right){
+    private synchronized void setPower(double left, double right){
         lVictor1.set(left);
         lVictor2.set(left);
         rVictor1.set(-right);
         rVictor2.set(-right);
     }
 
+    public synchronized void drive(double left, double right){
+        leftPower = left;
+        rightPower = right;
+    }
     public synchronized double getLeftPower(){
-        return lVictor1.get();
+        return leftPower;
     }
     
     public synchronized double getRightPower(){
-        return rVictor1.get();
+        return rightPower;
     }
     
     public void run(){
         while(true){
             if(enabled){
-                
+                setPower(leftPower, rightPower);
             }
+            
+            Timer.delay(0.05);
         }
     }
  
@@ -98,7 +104,7 @@ public class DriveModule extends Module{
 
         public void pidWrite(double d) {
             //not sure if this will work
-            drive(d, -d);
+            drive(d, d);
         }
        
     }    
