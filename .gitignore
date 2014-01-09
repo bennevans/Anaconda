@@ -1,4 +1,10 @@
 
+
+
+
 # OS Files
 .DS_Store
 Thumbs.db
+
+#java stuff
+/build/
