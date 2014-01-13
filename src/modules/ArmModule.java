@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package modules;
 
 import config.ArmConfig;
@@ -22,7 +16,8 @@ public class ArmModule extends Module implements PIDOutput {
     private Encoder e;
     private Victor roller1, roller2, arm1, arm2;
     double s;
-    public ArmModule(int v1, int v2, int v3, int v4, int edport1, int edport2, double s){
+    double any;
+    public ArmModule(int v1, int v2, int v3, int v4, int edport1, int edport2, double s, double any){
        controller = new PIDController(ArmConfig.p, ArmConfig.i, ArmConfig.d,e,this);
        e = new Encoder(edport1, edport2);
        roller1 = new Victor(v1);
@@ -30,6 +25,7 @@ public class ArmModule extends Module implements PIDOutput {
        arm1 = new Victor(v3);
        arm2 = new Victor(v4);
        this.s = s;
+       this.any = any;
     }
     public synchronized void setpositionA()
     {
@@ -49,19 +45,17 @@ public class ArmModule extends Module implements PIDOutput {
     }
     public synchronized void anyposition()
     {
-       
+       controller.setSetpoint(any);
     }
     public void run(){
         while(true)
         {
             if(enabled)
             {
-                s = e.get();
                 controller.enable();
             }
             else
             {
-                e.stop();
                 controller.disable();
             }
         }
