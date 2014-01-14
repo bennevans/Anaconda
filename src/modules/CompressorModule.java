@@ -1,7 +1,8 @@
 
-package modules;
-
 import edu.wpi.first.wpilibj.Compressor;
+import modules.Module;
+
+
 
 /**
  *
@@ -16,6 +17,10 @@ public class CompressorModule extends Module {
     public void run(){
         compressor.start();
         
+        
+    }
+    public String toString(){
+        return "Pressure switch: " + compressor.getPressureSwitchValue();
         
     }
     
