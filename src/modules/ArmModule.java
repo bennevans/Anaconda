@@ -65,7 +65,11 @@ public class ArmModule extends Module implements PIDOutput {
        arm1.set(d);
        arm2.set(d);
     }
-    
+    public String toString(){
+        return "Roller Value:" + roller1.get() + "Encoder Value:" + e.get() + "PID error:" + controller.getError();
+        
+//you dont need ^
+    }
     
     
 }
