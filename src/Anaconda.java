@@ -8,7 +8,7 @@
 
 
 
-import config.CompressorConfig
+import config.CompressorConfig;
 import config.ArmConfig;
 import config.DriveConfig;
 import config.ShooterConfig;

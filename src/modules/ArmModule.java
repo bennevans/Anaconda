@@ -15,8 +15,6 @@ public class ArmModule extends Module implements PIDOutput {
     private PIDController controller;
     private Encoder e;
     private Victor roller1, roller2, arm1, arm2;
-    double s;
-    double any;
     public ArmModule(int v1, int v2, int v3, int v4, int edport1, int edport2, double s, double any){
        controller = new PIDController(ArmConfig.p, ArmConfig.i, ArmConfig.d,e,this);
        e = new Encoder(edport1, edport2);
@@ -24,28 +22,26 @@ public class ArmModule extends Module implements PIDOutput {
        roller2 = new Victor(v2);
        arm1 = new Victor(v3);
        arm2 = new Victor(v4);
-       this.s = s;
-       this.any = any;
     }
-    public synchronized void setpositionA()
+    public synchronized void setPositionA()
     {
         controller.setSetpoint(0);
     }
-    public synchronized void setpositionB()
+    public synchronized void setPositionB()
     {
         controller.setSetpoint(180);
     }
-    public synchronized void setpositionC()
+    public synchronized void setPositionC()
     {
        controller.setSetpoint(45);
     }
-    public synchronized void setpositionD()
+    public synchronized void setPositionD()
     {
         controller.setSetpoint(90);
     }
-    public synchronized void anyposition()
+    public synchronized void setPosition(double setposition)
     {
-       controller.setSetpoint(any);
+       controller.setSetpoint(setposition);
     }
     public void run(){
         while(true)
