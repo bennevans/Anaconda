@@ -87,5 +87,8 @@ public class ShooterModule extends Module{
             Timer.delay(0.05);
         }
     }
-    
+    public String toString()
+    {
+        return "Winch Charged?" + winchSensor.get();
+    }
 }

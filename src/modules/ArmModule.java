@@ -28,21 +28,21 @@ public class ArmModule extends Module implements PIDOutput {
     }
     public synchronized void setPositionB()
     {
-        controller.setSetpoint(180);
+        setPosition(180);
     }
     public synchronized void setPositionC()
     {
-       controller.setSetpoint(45);
+       setPosition(45);
     }
     public synchronized void setPositionD()
     {
-        controller.setSetpoint(90);
+        setPosition(90);
     }
     public synchronized void setPosition(double setposition)
     {
         //TODO calculate correct encoder tick numbers based on angle
-        
-       controller.setSetpoint(setposition);
+       double setPositionB = (200.0 * setposition)/360 ;
+       controller.setSetpoint(setPositionB);
     }
     public void run(){
         while(true)
@@ -65,7 +65,11 @@ public class ArmModule extends Module implements PIDOutput {
        arm1.set(d);
        arm2.set(d);
     }
-    
+    public String toString(){
+        return "Roller Value:" + roller1.get() + "Encoder Value:" + e.get() + "PID error:" + controller.getError();
+        
+//you dont need ^
+    }
     
     
 }
