@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.Victor;
 
 /**
  *
- * @author Ben Evans
+ * @author Ben Evans & Michael Chin
  */
 public class ShooterModule extends Module{
     
@@ -89,6 +89,19 @@ public class ShooterModule extends Module{
     }
     public String toString()
     {
-        return "Winch Charged?" + winchSensor.get();
+        return "Winch Charge Status:" + winchSensor.get() + "State:" + getState();
+    }
+    public String getState(){
+        if (mode == READY){
+            return "SHOOTER_READY";
+        }else if(mode == LIFTING_PNEUMATIC){
+            return "LIFTING_PNEUMATIC";
+        }else if(mode == SHOOTING){
+            return "FIRING_BALLZ";
+        }else if(mode == RELOADING){
+            return "RELOADING";
+        }else{
+            return "NOT_READY";
+        }
     }
 }
