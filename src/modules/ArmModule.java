@@ -5,7 +5,6 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.networktables2.util.Set;
 
 /**
  *
@@ -25,7 +24,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
     public synchronized void setPositionA()
     {
-        controller.setSetpoint(0);
+        setPosition(0);
     }
     public synchronized void setPositionB()
     {
@@ -41,6 +40,8 @@ public class ArmModule extends Module implements PIDOutput {
     }
     public synchronized void setPosition(double setposition)
     {
+        //TODO calculate correct encoder tick numbers based on angle
+        
        controller.setSetpoint(setposition);
     }
     public void run(){

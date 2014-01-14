@@ -18,5 +18,9 @@ public class CompressorModule extends Module {
         
         
     }
+    public String toString(){
+        return ""+ "Pressure switch: " + compressor.getPressureSwitchValue();
+        
+    }
     
 }
