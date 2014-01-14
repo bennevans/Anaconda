@@ -15,12 +15,11 @@ public class DriveModule extends Module{
     private Encoder lEncoder, rEncoder;
     private PIDSource encoderSource;
     private double distancePerPulse;
-    private Gyro gyro;
-    private PIDController angleController, driveController;
-    private PIDOutput angleOutput, driveOutput;
+    private PIDController driveController;
+    private PIDOutput driveOutput;
     private double leftPower = 0, rightPower = 0;
     
-    public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist, int gyroc){
+    public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist){
         lVictor1 = new Victor(lv1);
         lVictor2 = new Victor(lv2);
         rVictor1 = new Victor(rv1);
@@ -30,17 +29,11 @@ public class DriveModule extends Module{
         rEncoder = new Encoder(renca, rencb);
         encoderSource = new DualEncoder();
         distancePerPulse = dist;
-        gyro = new Gyro(gyroc);
-        
-        angleOutput = new AngleOutput();
-        angleController = new PIDController(DriveConfig.GYRO_P, DriveConfig.GYRO_I, DriveConfig.GYRO_D, gyro, angleOutput);
         
         setupEncoders();
         
         driveOutput = new DriveOutput();
         driveController = new PIDController(DriveConfig.ENCODER_P, DriveConfig.ENCODER_I, DriveConfig.ENCODER_D, encoderSource, driveOutput);
-        
-        angleController.setOutputRange(-1.0, 1.0);
         driveController.setOutputRange(-1.0, 1.0);
         
     }
@@ -57,14 +50,8 @@ public class DriveModule extends Module{
         rEncoder.reset();
         driveController.reset();
     }
-    
-    public synchronized void resetGyro(){
-        gyro.reset();
-        angleController.reset();
-    }
         
     public void reset(){
-        resetGyro();
         resetEncoders();
     }
     
@@ -87,11 +74,6 @@ public class DriveModule extends Module{
         return rightPower;
     }
     
-    public synchronized void setVector(double velocity, double angle){
-        angleController.setSetpoint(angle);
-        driveController.setset
-    }
-    
     //TODO add methods to change pid values
 
     
@@ -101,10 +83,8 @@ public class DriveModule extends Module{
                 setPower(leftPower, rightPower);
                 
                 if(autoMode){
-                    angleController.enable();
                     driveController.enable();
                 }else{
-                    angleController.disable();
                     driveController.disable();
                 }
                 
@@ -115,17 +95,7 @@ public class DriveModule extends Module{
             Timer.delay(0.05);
         }
     }
- 
-    private class AngleOutput implements PIDOutput{
-
-        public void pidWrite(double d) {
-            //not sure if this will work
-            drive(d, -d);
-        }
-       
-    }    
-    
-    private class DriveOutput implements PIDOutput{
+     private class DriveOutput implements PIDOutput{
 
         public void pidWrite(double d) {
             //not sure if this will work
