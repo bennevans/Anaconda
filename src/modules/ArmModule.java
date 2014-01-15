@@ -38,6 +38,11 @@ public class ArmModule extends Module implements PIDOutput {
     {
         setPosition(90);
     }
+    
+    public synchronized void setPID(double p, double i, double d){
+        controller.setPID(p, i, d);
+    }
+    
     public synchronized void setPosition(double setposition)
     {
         //TODO calculate correct encoder tick numbers based on angle

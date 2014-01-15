@@ -75,8 +75,10 @@ public class DriveModule extends Module{
         return rightPower;
     }
     
-    //TODO add methods to change pid values
-
+    public synchronized void setPID(double p, double i, double d){
+        driveController.setPID(p, i, d);
+    }
+    
     public synchronized void setDistance(double distance){
         driveController.setSetpoint(distance);
     }

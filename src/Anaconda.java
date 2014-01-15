@@ -13,6 +13,7 @@ import config.CompressorConfig;
 import config.DriveConfig;
 import config.ShooterConfig;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Timer;
 import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
@@ -33,7 +34,7 @@ public class Anaconda extends IterativeRobot {
     ArmModule armModule;
 
     public void robotInit(){
-        driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
+        driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
         armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.Encoder_port1, ArmConfig.Encoder_port2);
@@ -68,10 +69,10 @@ public class Anaconda extends IterativeRobot {
         armModule.enable();
         
         //Move forward
-        
+        driveModule.setDistance(0.0);
+        Timer.delay(0.0);
         //shoot
-        
-        //reload
+        shooterModule.shoot();
         
     }
 
@@ -89,5 +90,5 @@ public class Anaconda extends IterativeRobot {
     public void teleopPeriodic(){
 
     }
-
+    
 }
