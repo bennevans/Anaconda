@@ -4,6 +4,7 @@ package modules;
 
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.command.PIDCommand;
 /**
  *
  * @author Ben Evans
@@ -76,6 +77,10 @@ public class DriveModule extends Module{
     
     //TODO add methods to change pid values
 
+    public synchronized void setDistance(double distance){
+        driveController.setSetpoint(distance);
+    }
+    
     
     public void run(){
         while(true){
@@ -106,7 +111,7 @@ public class DriveModule extends Module{
     
     private class DualEncoder implements PIDSource{
         public double pidGet(){
-            return (lEncoder.pidGet() + rEncoder.pidGet()) / 2.0;
+            return (lEncoder.getDistance() + rEncoder.getDistance()) / 2.0;
         }
     }
 }

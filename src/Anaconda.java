@@ -8,6 +8,8 @@
 
 
 
+import config.ArmConfig;
+import config.CompressorConfig;
 import config.DriveConfig;
 import config.ShooterConfig;
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -34,21 +36,25 @@ public class Anaconda extends IterativeRobot {
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
+        armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.Encoder_port1, ArmConfig.Encoder_port2);
     }
 
     public void startCompetition(){
         driveModule.start();
         shooterModule.start();
         compressorModule.start();
+        armModule.start();
     }
 
     public void disabledInit(){
         driveModule.disable();
         shooterModule.disable();
         compressorModule.disable();
+        armModule.disable();
         driveModule.reset();
         shooterModule.reset();
         compressorModule.reset();
+        armModule.reset();
     }
 
     public void disabledPeriodic(){
@@ -59,6 +65,14 @@ public class Anaconda extends IterativeRobot {
         shooterModule.enable();
         driveModule.enable();
         compressorModule.enable();
+        armModule.enable();
+        
+        //Move forward
+        
+        //shoot
+        
+        //reload
+        
     }
 
     public void autonomousPeriodic(){
@@ -68,6 +82,8 @@ public class Anaconda extends IterativeRobot {
     public void teleopInit(){
         shooterModule.enable();
         driveModule.enable();
+        compressorModule.enable();
+        armModule.enable();
     }
 
     public void teleopPeriodic(){
