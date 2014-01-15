@@ -22,19 +22,19 @@ public class ArmModule extends Module implements PIDOutput {
        arm1 = new Victor(v3);
        arm2 = new Victor(v4);
     }
-    public synchronized void setPositionA()
+    public synchronized void setPosition_left()
     {
         setPosition(0);
     }
-    public synchronized void setPositionB()
+    public synchronized void setPosition_right()
     {
         setPosition(180);
     }
-    public synchronized void setPositionC()
+    public synchronized void setPosition_angled()
     {
        setPosition(45);
     }
-    public synchronized void setPositionD()
+    public synchronized void setPosition_up()
     {
         setPosition(90);
     }
