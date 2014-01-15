@@ -36,19 +36,22 @@ public class Anaconda extends IterativeRobot {
     public void robotInit(){
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.GYRO);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
-
+        compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
     }
 
     public void startCompetition(){
         driveModule.start();
         shooterModule.start();
+        compressorModule.start();
     }
 
     public void disabledInit(){
         driveModule.disable();
         shooterModule.disable();
+        compressorModule.disable();
         driveModule.reset();
         shooterModule.reset();
+        compressorModule.reset();
     }
 
     public void disabledPeriodic(){
@@ -58,10 +61,11 @@ public class Anaconda extends IterativeRobot {
     public void autonomousInit(){
         shooterModule.enable();
         driveModule.enable();
+        compressorModule.enable();
     }
 
     public void autonomousPeriodic(){
-
+        
     }
 
     public void teleopInit(){
