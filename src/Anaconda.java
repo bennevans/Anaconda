@@ -13,6 +13,7 @@ import config.CompressorConfig;
 import config.DriveConfig;
 import config.ShooterConfig;
 import edu.wpi.first.wpilibj.IterativeRobot;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.Timer;
 import modules.DriveModule;
 import modules.ArmModule;
@@ -33,11 +34,22 @@ public class Anaconda extends IterativeRobot {
     CompressorModule compressorModule;
     ArmModule armModule;
 
+    //Driver controllers
+    Joystick lJoy, rJoy;
+    XBox xbox;
+    
+    
     public void robotInit(){
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
         armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.Encoder_port1, ArmConfig.Encoder_port2);
+        
+        lJoy = new Joystick(1);
+        rJoy = new Joystick(2);
+        xbox = new XBox(3);
+        
+        
     }
 
     public void startCompetition(){
@@ -88,7 +100,11 @@ public class Anaconda extends IterativeRobot {
     }
 
     public void teleopPeriodic(){
-
+        
+        double leftPower = lJoy.getY();
+        double rightPower = rJoy.getX();
+        
+        
     }
     
 }
