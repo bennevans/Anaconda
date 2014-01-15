@@ -12,8 +12,9 @@ public class XBox extends Joystick{
         super(port);
     }
     
-    //TODO find correct ports
-    
+    public boolean getA(){
+        return getRawButton(1);
+    }
     
     
 }

@@ -38,6 +38,8 @@ public class Anaconda extends IterativeRobot {
     Joystick lJoy, rJoy;
     XBox xbox;
     
+    int reverseButtonCounter = 0;
+    boolean reverseButtonLastState = false;
     
     public void robotInit(){
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK);
@@ -104,6 +106,7 @@ public class Anaconda extends IterativeRobot {
         double leftPower = lJoy.getY();
         double rightPower = rJoy.getX();
         
+        driveModule.drive(leftPower, rightPower);
         
     }
     

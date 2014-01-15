@@ -4,7 +4,6 @@ package modules;
 
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.command.PIDCommand;
 /**
  *
  * @author Ben Evans
