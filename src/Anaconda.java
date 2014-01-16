@@ -106,7 +106,7 @@ public class Anaconda extends IterativeRobot {
     public void teleopPeriodic(){
         
         double leftPower = lJoy.getY();
-        double rightPower = rJoy.getX();
+        double rightPower = rJoy.getY();
         
         if(rJoy.getRawButton(RobotConfig.REVERSE_BUTTON) != reverseButtonLastState)
             reverseButtonCounter++;
