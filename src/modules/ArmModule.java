@@ -25,10 +25,10 @@ public class ArmModule extends Module implements PIDOutput {
        arm2 = new Victor(v4);
     }
 /**
- * set roller
+ * turn roller on or off
  * @param on 
  */
-    public synchronized void set(boolean on){
+    public synchronized void setRoller(boolean on){
         if(on)
         {
             roller1.set(ArmConfig.ROLLER_SPEED);
@@ -36,6 +36,7 @@ public class ArmModule extends Module implements PIDOutput {
         }
         
     }
+    
  /**
   * sets the position of the arm to the left
   */
