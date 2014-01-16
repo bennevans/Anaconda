@@ -7,12 +7,12 @@ package config;
  */
 public class ShooterConfig {
     
-    public static int LIFTER = 0;
-    public static int SHIFTER = 0;
-    public static int ROLLER = 0; 
-    public static int WINCH1 = 0;
-    public static int WINCH2 = 0;
-    public static int TOUCH_SENSOR = 0;
+    public final static int LIFTER = 0;
+    public final static int SHIFTER = 0;
+    public final static int ROLLER = 0; 
+    public final static int WINCH1 = 0;
+    public final static int WINCH2 = 0;
+    public final static int TOUCH_SENSOR = 0;
     
-    public static double WINCH_SPEED = 0.0;
+    public final static double WINCH_SPEED = 0.0;
 }
