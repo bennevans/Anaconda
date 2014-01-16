@@ -8,8 +8,9 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 
 /**
- *
- * @author Ben Evans & Michael Chin
+ *controls the shooter
+ * @author Ben Evans 
+ * @author Michael Chin
  */
 public class ShooterModule extends Module{
     
@@ -27,7 +28,15 @@ public class ShooterModule extends Module{
     
     private int mode;
     
-    
+/**
+ * the constructor for this class
+ * @param lift
+ * @param roll
+ * @param shift
+ * @param win1
+ * @param win2
+ * @param button 
+ */    
     public ShooterModule(int lift, int roll, int shift, int win1, int win2, int button){
         lifter = new Solenoid(lift);
         roller = new Victor(roll);
@@ -37,20 +46,30 @@ public class ShooterModule extends Module{
         winchSensor = new DigitalInput(button);
         mode = READY;
     }
-    
+/**
+ * shoots, lifts Pneumatic
+ */
     public void shoot(){
        if(mode == READY)
            mode = LIFTING_PNEUMATIC;
     }
-    
+ /**
+  * 
+  * @return mode 
+  */   
     public int getMode(){
         return mode;
     }
-    
+/**
+ * 
+ * @return mode == Ready 
+ */    
     public boolean isReady(){
         return mode == READY;
     }
-    
+/**
+ * handles shooter state
+ */ 
     public void run(){
         long stateTimer = 0;
         
@@ -86,10 +105,18 @@ public class ShooterModule extends Module{
             Timer.delay(0.05);
         }
     }
+/**
+ * 
+ * @return winch charge status and state 
+ */    
     public String toString()
     {
         return "Winch Charge Status:" + winchSensor.get() + "State:" + getState();
     }
+/**
+ * 
+ * @return state
+ */    
     public String getState(){
         if (mode == READY){
             return "SHOOTER_READY";
