@@ -21,11 +21,9 @@ import modules.ArmModule;
 import modules.ShooterModule;
 
 /**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the SimpleRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the manifest file in the resource
- * directory.
+ * It is the mother of all classes that starts everything
+ * @author Ben Evans
+ * @author Ankith Uppundda
  */
 public class Anaconda extends IterativeRobot {
 
