@@ -18,8 +18,9 @@ public class DriveModule extends Module{
     private PIDController driveController;
     private PIDOutput driveOutput;
     private double leftPower = 0, rightPower = 0;
+    private Solenoid solenoid;
     
-    public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist){
+    public DriveModule(int lv1, int lv2, int rv1, int rv2, int lenca, int lencb, int renca, int rencb, double dist, int solenoidPort){
         lVictor1 = new Victor(lv1);
         lVictor2 = new Victor(lv2);
         rVictor1 = new Victor(rv1);
@@ -29,7 +30,7 @@ public class DriveModule extends Module{
         rEncoder = new Encoder(renca, rencb);
         encoderSource = new DualEncoder();
         distancePerPulse = dist;
-        
+        solenoid = new Solenoid(solenoidPort);
         setupEncoders();
         
         driveOutput = new DriveOutput();
@@ -37,7 +38,6 @@ public class DriveModule extends Module{
         driveController.setOutputRange(-1.0, 1.0);
         
     }
-    
     private synchronized void setupEncoders(){
         lEncoder.start();
         rEncoder.start();
@@ -50,7 +50,9 @@ public class DriveModule extends Module{
         rEncoder.reset();
         driveController.reset();
     }
-        
+    public void setGear(boolean High){   
+        solenoid.set(High);
+    }
     public void reset(){
         resetEncoders();
     }

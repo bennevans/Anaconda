@@ -16,5 +16,5 @@ public class DriveConfig {
     public static final int RIGHT_ENCODER_A = 0, RIGHT_ENCODER_B = 0;
     //PID constants
     public static final int ENCODER_P = 0, ENCODER_I = 0, ENCODER_D = 0;
-    
+    public static final int SOLENOID_PORT = 0;
 }
