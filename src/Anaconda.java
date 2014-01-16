@@ -11,6 +11,7 @@
 import config.ArmConfig;
 import config.CompressorConfig;
 import config.DriveConfig;
+import config.RobotConfig;
 import config.ShooterConfig;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
@@ -93,7 +94,7 @@ public class Anaconda extends IterativeRobot {
     public void autonomousPeriodic(){
         
     }
-
+    
     public void teleopInit(){
         shooterModule.enable();
         driveModule.enable();
@@ -103,10 +104,23 @@ public class Anaconda extends IterativeRobot {
 
     public void teleopPeriodic(){
         
+        //Drive        
         double leftPower = lJoy.getY();
         double rightPower = rJoy.getX();
         
-        driveModule.drive(leftPower, rightPower);
+        if(rJoy.getRawButton(RobotConfig.REVERSE_BUTTON) != reverseButtonLastState)
+            reverseButtonCounter++;
+        reverseButtonLastState = rJoy.getRawButton(RobotConfig.REVERSE_BUTTON);
+        
+        if(reverseButtonCounter % 4 == 0)
+            driveModule.drive(leftPower, rightPower);
+        else if(reverseButtonCounter % 2 == 0)
+            driveModule.drive(-rightPower,-leftPower);
+        
+        if((rJoy.getTrigger() || xbox.getRB()) && shooterModule.isReady())
+            shooterModule.shoot();
+        
+        
         
     }
     
