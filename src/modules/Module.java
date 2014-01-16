@@ -13,11 +13,13 @@ public class Module implements Runnable{
     protected Thread controlThread;
     protected boolean enabled = false;
     protected boolean autoMode = true;
+    protected String moduleName;
 /**
  * The constructor which also defines an object of type thread.
  */    
     public Module(){
         controlThread = new Thread(this);
+        moduleName = "Module";
     }
 /**
  * starts the modules using the Thread, controlThread
@@ -61,4 +63,13 @@ public class Module implements Runnable{
     public synchronized void setAutoModeOff(){
         autoMode = false;
     }
+    
+    public synchronized String getLogData(){
+        return "\t\t<error>"+getModuleName()+" getLogData() not overwritten</error>";
+    }
+    
+    public String getModuleName(){
+        return moduleName;
+    }
+    
 }
