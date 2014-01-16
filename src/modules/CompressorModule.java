@@ -14,11 +14,17 @@ public class CompressorModule extends Module {
     public CompressorModule(int pressureSwitchChannel, int compressorRelayChannel){
         this.compressor = new Compressor(pressureSwitchChannel, compressorRelayChannel);
     }
+/**
+ * starts compressor
+ */
     public void run(){
         compressor.start();
         
         
     }
+/**
+ * @return values for switch values
+ */    
     public String toString(){
         return "Pressure switch: " + compressor.getPressureSwitchValue();
         

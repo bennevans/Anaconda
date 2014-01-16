@@ -14,4 +14,5 @@ public class ArmConfig {
    public static int ARM_VICTOR_TWO = 0;
    public static int Encoder_port1 = 0;
    public static int Encoder_port2 = 0;
+   public static final int ROLLER_SPEED = 0;
 }

@@ -50,7 +50,7 @@ public class DriveModule extends Module{
         rEncoder.reset();
         driveController.reset();
     }
-    public void setGear(boolean High){   
+    public synchronized void setGear(boolean High){   
         solenoid.set(High);
     }
     public void reset(){
