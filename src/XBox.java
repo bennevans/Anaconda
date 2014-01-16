@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj.Joystick;
 
 /**
  *
- * @author Ben Evans & Michael Chin
+ * @author Ben Evans
+ * @author Michael Chin
  */
 public class XBox extends Joystick{
 

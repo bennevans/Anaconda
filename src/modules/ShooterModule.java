@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 
 /**
- *controls the shooter
+ * controls the shooter
  * @author Ben Evans 
  * @author Michael Chin
  */

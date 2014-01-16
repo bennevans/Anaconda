@@ -3,7 +3,7 @@ package config;
 
 /**
  *
- * @author Team 114
+ * @author Ben Evans
  */
 public class RobotConfig {
     
