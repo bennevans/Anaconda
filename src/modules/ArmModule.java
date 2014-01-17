@@ -26,7 +26,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
 /**
  * turn roller on or off
- * @param on 
+ * @param on
  */
     public synchronized void setRoller(boolean on){
         if(on)
@@ -34,51 +34,51 @@ public class ArmModule extends Module implements PIDOutput {
             roller1.set(ArmConfig.ROLLER_SPEED);
             roller2.set(-ArmConfig.ROLLER_SPEED);
         }
-        
+
     }
-    
+
  /**
   * sets the position of the arm to the left
   */
     public synchronized void setPosition_left()
     {
-        setPosition(0);
+        setPosition(10);
     }
 /**
- * sets the position of the arm to the right
- */    
+ * sets the position of the arm to the angled
+ */
     public synchronized void setPosition_right()
     {
-        setPosition(180);
+        setPosition(85);
     }
 /**
  * sets the position of the arm to an angled position
- */    
+ */
     public synchronized void setPosition_angled()
     {
        setPosition(45);
     }
 /**
- * sets position of arm to up
- */    
+ * sets position of arm to slanted
+ */
     public synchronized void setPosition_up()
     {
-        setPosition(90);
+        setPosition(70);
     }
 /**
  * sets p,i,d constants
  * @param p proportional constant
  * @param i integral
  * @param d derivative
- * 
- */    
+ *
+ */
     public synchronized void setPID(double p, double i, double d){
         controller.setPID(p, i, d);
     }
 /**
  * sets position of the arm
- * @param setposition 
- */    
+ * @param setposition
+ */
     public synchronized void setPosition(double setposition)
     {
         //TODO calculate correct encoder tick numbers based on angle
@@ -109,7 +109,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
 /**
  * makes specific value for victors
- * @param d 
+ * @param d
  * sets the victor value to double d
  */
     public void pidWrite(double d) {
@@ -117,14 +117,14 @@ public class ArmModule extends Module implements PIDOutput {
        arm2.set(d);
     }
 /**
- * makes a string 
+ * makes a string
  * @return roller victor values, encoder values, controller errors
  */
     public String toString(){
         return "Roller Value:" + roller1.get() + "Encoder Value:" + e.get() + "PID error:" + controller.getError();
-        
+
 //you dont need ^
     }
-    
-    
+
+
 }
