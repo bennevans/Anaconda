@@ -37,8 +37,8 @@ public class ArmModule extends Module implements PIDOutput {
        arm2 = new Victor(v4);
     }
     /**
-     * turn roller on or off
-     * @param on
+     * sets the roller on or off
+     * @param on state of the roller
      */
     public synchronized void setRoller(boolean on){
         if(on)

@@ -13,7 +13,7 @@ Robot code to control the robot for FIRST FRC's Aerial Assist 2014 game.
 
 *Arm:*
 
-*Compressor"*
+*Compressor:*
 
 **Authors:**
 Ben Evans, Michael Chin, Ankith Uppunda
