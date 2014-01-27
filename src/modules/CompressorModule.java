@@ -1,6 +1,7 @@
+package modules;
+
 
 import edu.wpi.first.wpilibj.Compressor;
-import modules.Module;
 
 
 
@@ -27,7 +28,9 @@ public class CompressorModule extends Module {
  */    
     public String toString(){
         return "Pressure switch: " + compressor.getPressureSwitchValue();
-        
     }
     
+    public String getLogData(){
+        return "\t\t<data name = \"compressor\" value=\""+ ((!compressor.getPressureSwitchValue()) ? "ON" : "OFF" )+"\"/>";
+    }
 }

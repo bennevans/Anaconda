@@ -59,7 +59,7 @@ public class Anaconda extends IterativeRobot {
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.SOLENOID_PORT);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
-        armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.Encoder_port1, ArmConfig.Encoder_port2);
+        armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.POT_PORT);
         
         lJoy = new Joystick(1);
         rJoy = new Joystick(2);
@@ -70,6 +70,7 @@ public class Anaconda extends IterativeRobot {
         try {
             logFile = (FileConnection) Connector.open("logfile.xml", Connector.WRITE);
             logps = new PrintStream(logFile.openOutputStream());
+            logps.println("<?xml version=\"1.0\"?>");
         } catch (IOException ex) {
             System.err.println("Error Opening logfile!");
             logFile = null;
@@ -168,20 +169,20 @@ public class Anaconda extends IterativeRobot {
         if(logFile == null || logps == null)
             return;
         
-        logps.println("<>");
-        logps.println("\t<>");
+        logps.println("<block time= \""+ systemTime.get() +"\">");
+        logps.println("\t<module name=\"drive\">");
         logps.println(driveModule.getLogData());
-        logps.println("\t</>");
-        logps.println("\t<>");
+        logps.println("\t</module>");
+        logps.println("\t<module name=\"shooter\">");
         logps.println(shooterModule.getLogData());
-        logps.println("\t</>");
-        logps.println("\t<>");
+        logps.println("\t</module>");
+        logps.println("\t<module name=\"arm\">");
         logps.println(armModule.getLogData());
-        logps.println("\t</>");
-        logps.println("\t<>");
+        logps.println("\t</module>");
+        logps.println("\t<module name=\"compressor\">");
         logps.println(compressorModule.getLogData());
-        logps.println("\t</>");
-        logps.println("</>");
+        logps.println("\t</module>");
+        logps.println("</block>");
         
     }
     

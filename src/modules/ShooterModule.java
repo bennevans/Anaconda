@@ -113,6 +113,16 @@ public class ShooterModule extends Module{
     {
         return "Winch Charge Status:" + winchSensor.get() + "State:" + getState();
     }
+    
+    public String getLogData(){
+        String line1 = "\t\t<data name=\"rollerState\" value=\""+roller.get()+"\">\n";
+        String line2 = "\t\t<data name=\"lifter\" value=\""+(lifter.get() ? "ON" : "OFF")+"\">\n";
+        String line3 = "\t\t<data name=\"dog\" value=\""+(shifter.get() ? "ON" : "OFF")+"\">\n";
+        String line4 = "\t\t<data name=\"winch\" value=\""+winch1.get()+"\">\n";
+        String line5 = "\t\t<data name=\"state\" value=\""+getState()+"\">";
+        return line1+line2+line3+line4+line5;
+    }
+    
 /**
  * 
  * @return state

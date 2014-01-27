@@ -131,6 +131,15 @@ public class DriveModule extends Module{
         driveController.setSetpoint(distance);
     }
     
+    public String getLogData(){
+        String line1 = "\t\t<data name=\"leftPower\" value=\""+lVictor1.get()+"\">\n";
+        String line2 = "\t\t<data name=\"rightPower\" value=\""+rVictor1.get()+"\">\n";
+        String line3 = "\t\t<data name=\"leftEncoder\" value=\""+lEncoder.get()+"\">\n";
+        String line4 = "\t\t<data name=\"rightEncoder\" value=\""+rEncoder.get()+"\">\n";
+        String line5123445454 = "\t\t<data name=\"gear\" value=\""+(solenoid.get() ? "HIGH" : "LOW")+"\">";
+        return line1+line2+line3+line4+line5123445454;
+    }
+    
 /**
  * handles driving
  */    
