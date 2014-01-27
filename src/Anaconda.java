@@ -23,6 +23,7 @@ import com.sun.squawk.microedition.io.FileConnection;
 import java.io.IOException;
 import java.io.PrintStream;
 import javax.microedition.io.Connector;
+import modules.CompressorModule;
 
 /**
  * It is the mother of all classes that starts everything
