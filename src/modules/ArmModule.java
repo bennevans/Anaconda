@@ -12,11 +12,22 @@ import edu.wpi.first.wpilibj.interfaces.Potentiometer;
  * will be able to do. It has methods that sets the arm in a specific position or in any
  * position.
  * @author Ankith Uppunda
+ * @author Ben Evans
  */
 public class ArmModule extends Module implements PIDOutput {
     private PIDController controller;
     private Potentiometer pot;
     private Victor roller1, roller2, arm1, arm2;
+    
+    /**
+     * constructor for ArmModule
+     * @param v1 roller 1 port
+     * @param v2 roller 2 port
+     * @param v3 arm1 port
+     * @param v4 arm2 port
+     * @param potPort potentiometer port
+     */
+    
     public ArmModule(int v1, int v2, int v3, int v4, int potPort){
        pot = new AnalogPotentiometer(potPort);
        controller = new PIDController(ArmConfig.p, ArmConfig.i, ArmConfig.d,pot,this);
@@ -25,10 +36,10 @@ public class ArmModule extends Module implements PIDOutput {
        arm1 = new Victor(v3);
        arm2 = new Victor(v4);
     }
-/**
- * turn roller on or off
- * @param on
- */
+    /**
+     * turn roller on or off
+     * @param on
+     */
     public synchronized void setRoller(boolean on){
         if(on)
         {
@@ -38,57 +49,59 @@ public class ArmModule extends Module implements PIDOutput {
 
     }
 
- /**
-  * sets the position of the arm to the left
-  */
+    /**
+     * sets the position of the arm to the left
+     */
     public synchronized void setPosition_left()
     {
         setPosition(10);
     }
-/**
- * sets the position of the arm to the angled
- */
+    /**
+     * sets the position of the arm to the angled
+     */
     public synchronized void setPosition_right()
     {
         setPosition(85);
     }
-/**
- * sets the position of the arm to an angled position
- */
+    
+    /**
+     * sets the position of the arm to an angled position
+     */
     public synchronized void setPosition_angled()
     {
        setPosition(45);
     }
-/**
- * sets position of arm to slanted
- */
+    /**
+     * sets position of arm to slanted
+     */
     public synchronized void setPosition_up()
     {
         setPosition(70);
     }
-/**
- * sets p,i,d constants
- * @param p proportional constant
- * @param i integral
- * @param d derivative
- *
- */
+    
+    /**
+     * sets p,i,d constants
+     * @param p proportional constant
+     * @param i integral constant
+     * @param d derivative constant
+     *
+     */
     public synchronized void setPID(double p, double i, double d){
         controller.setPID(p, i, d);
     }
-/**
- * sets position of the arm
- * @param setposition
- */
+    /**
+     * sets position of the arm
+     * @param setposition
+     */
     public synchronized void setPosition(double setposition)
     {
         //TODO calculate correct encoder tick numbers based on angle
        double setPositionB = (200.0 * setposition)/360 ;
        controller.setSetpoint(setPositionB);
     }
-/**
- * handles arm controller
- */
+    /**
+     * handles arm controller
+     */
     public void run(){
         while(true)
         {
@@ -102,29 +115,33 @@ public class ArmModule extends Module implements PIDOutput {
             }
         }
     }
-/**
- * resets arm
- */
+    /**
+     * resets arm
+     */
     public void reset(){
        controller.reset();
     }
-/**
- * makes specific value for victors
- * @param d
- * sets the victor value to double d
- */
+    /**
+     * implementation of pidOutput
+     * @param d pid output value
+     */
     public void pidWrite(double d) {
        arm1.set(d);
        arm2.set(d);
     }
-/**
- * makes a string
- * @return roller victor values, encoder values, controller errors
- */
+    /**
+     * toString for ArmModule 
+     * @return current field values as a string
+     */
     public String toString(){
         return "Roller Value:" + roller1.get() + "Pot Value:" + pot.get() + "PID error:" + controller.getError();
     }
 
+    /**
+     * the log function for ArmModule
+     * @return log data as XML
+     */
+    
     public String getLogData(){
         String line1 = "\t\t<data name=\"roller\" value=\""+roller1.get()+"\"/>\n";
         String line2 = "\t\t<data name=\"pot\" value=\""+pot.get()+"\"/>\n";
