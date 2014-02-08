@@ -20,11 +20,9 @@ public class ArmModule extends Module implements PIDOutput {
     private Victor roller, arm;
     
     /**
-     * constructor for ArmModule
-     * @param v1 roller 1 port
-     * @param v2 roller 2 port
-     * @param v3 arm1 port
-     * @param v4 arm2 port
+     *  Constructor for ArmModule
+     * @param rollerPort roller port
+     * @param armPort arm port
      * @param potPort potentiometer port
      */
     
