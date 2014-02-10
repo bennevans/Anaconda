@@ -24,8 +24,11 @@ public class TankDrive extends SimpleRobot {
     
     Joystick left, right;
     Victor left1, left2, right1, right2;
-    XBox xbox;
+//    XBox xbox;
     Servo camera;
+    
+    int counter = 0;
+    boolean last = false;
     
     protected void robotInit() {
         
@@ -52,35 +55,32 @@ public class TankDrive extends SimpleRobot {
     
     public void operatorControl() {
         System.out.println("operatorControl()");
-        int counter = 0;
+        
         while(isOperatorControl() && isEnabled()){
             
-            Watchdog.getInstance().kill();
             
             double leftpower = -left.getY();
             double rightpower = right.getY();
             
+            
             leftpower = com.sun.squawk.util.MathUtils.pow(leftpower, 3);
             rightpower = com.sun.squawk.util.MathUtils.pow(rightpower, 3);
             
+            
+            if(right.getRawButton(3)){
+                double tmp = rightpower;
+                rightpower = leftpower;
+                leftpower = tmp;
+            }
+                        
             left1.set(leftpower);
             left2.set(leftpower);
             right1.set(rightpower);
             right2.set(rightpower);
             
             camera.setAngle((right.getZ()+1) * 90);
-            if(counter % 50 == 0){
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser1, 1, "LeftJoy: " + left.getY());
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser2, 1, "RightJoy: " + right.getY());
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3, 1, "LeftPower: " + leftpower);
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser4, 1, "RightPower: " + rightpower);
-                DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser5, 1, "Servo: " + camera.getAngle());
-                DriverStationLCD.getInstance().updateLCD();
-            }
-            
-            counter++;
-            
-            Timer.delay(0.05);
+
+            Timer.delay(0.1);
         }
     }
 

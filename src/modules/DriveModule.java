@@ -13,13 +13,15 @@ public class DriveModule extends Module{
     
     private Victor lVictor1, lVictor2, rVictor1, rVictor2;
     private Encoder lEncoder, rEncoder;
-    private PIDSource encoderSource;
     private double distancePerPulse;
-    private PIDController driveController;
-    private PIDOutput driveOutput;
     private double leftPower = 0, rightPower = 0;
-    private Solenoid solenoid;
+    private Solenoid gear;
     
+    private PIDController lcont, rcont;
+    double setpoint = 0;
+    private double ks, s;
+    private double error = 0;
+         
     /**
      * constructor
      * @param lv1 left victor 1 port
@@ -41,15 +43,37 @@ public class DriveModule extends Module{
         
         lEncoder = new Encoder(lenca, lencb);
         rEncoder = new Encoder(renca, rencb);
-        encoderSource = new DualEncoder();
         distancePerPulse = dist;
-        solenoid = new Solenoid(solenoidPort);
+        gear = new Solenoid(solenoidPort);
         setupEncoders();
         
-        driveOutput = new DriveOutput();
-        driveController = new PIDController(DriveConfig.ENCODER_P, DriveConfig.ENCODER_I, DriveConfig.ENCODER_D, encoderSource, driveOutput);
-        driveController.setOutputRange(-1.0, 1.0);
+        lcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
+
+            public double pidGet() {
+                return lEncoder.getDistance();
+            }
+        }, new PIDOutput() {
+
+            public void pidWrite(double d) {
+                lVictor1.set(d + s);
+                lVictor2.set(d + s);
+            }
+        });
         
+        rcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
+
+            public double pidGet() {
+                return rEncoder.getDistance();
+            }
+        }, new PIDOutput() {
+
+            public void pidWrite(double d) {
+                rVictor1.set(-d + s);
+                lVictor2.set(-d + s);
+            }
+        });
+        
+        ks = DriveConfig.KS;
     }
     /**
      * starts encoder and sets distance
@@ -59,6 +83,7 @@ public class DriveModule extends Module{
         rEncoder.start();
         lEncoder.setDistancePerPulse(distancePerPulse);
         rEncoder.setDistancePerPulse(distancePerPulse);
+        rEncoder.setReverseDirection(true);
     }
     /**
      * resets encoder, drive controller
@@ -66,14 +91,13 @@ public class DriveModule extends Module{
     public synchronized void resetEncoders(){
         lEncoder.reset();
         rEncoder.reset();
-        driveController.reset();
     }
     /**
      * sets gear
      * @param High 
      */    
     public synchronized void setGear(boolean High){   
-        solenoid.set(High);
+        gear.set(High);
     }
     /**
      * reset encoders
@@ -101,6 +125,11 @@ public class DriveModule extends Module{
         leftPower = left;
         rightPower = right;
     }
+    
+    public synchronized void setSetpoint(double setpoint){
+        this.setpoint = setpoint;
+    }
+    
     /**
      * returns power of left side
      * @return leftPower 
@@ -115,22 +144,6 @@ public class DriveModule extends Module{
     public synchronized double getRightPower(){
         return rightPower;
     }
-    /**
-     * set p,i,d constants for drive controller
-     * @param p proportional constant
-     * @param i integral constant
-     * @param d derivative constant
-     */    
-    public synchronized void setPID(double p, double i, double d){
-        driveController.setPID(p, i, d);
-    }
-    /**
-     * sets point to variable distance
-     * @param distance 
-     */    
-    public synchronized void setDistance(double distance){
-        driveController.setSetpoint(distance);
-    }
     
     /**
      * the log method for DriveModule
@@ -142,7 +155,7 @@ public class DriveModule extends Module{
         String line2 = "\t\t<data name=\"rightPower\" value=\""+rVictor1.get()+"\">\n";
         String line3 = "\t\t<data name=\"leftEncoder\" value=\""+lEncoder.get()+"\">\n";
         String line4 = "\t\t<data name=\"rightEncoder\" value=\""+rEncoder.get()+"\">\n";
-        String line5123445454 = "\t\t<data name=\"gear\" value=\""+(solenoid.get() ? "HIGH" : "LOW")+"\">";
+        String line5123445454 = "\t\t<data name=\"gear\" value=\""+(gear.get() ? "HIGH" : "LOW")+"\">";
         return line1+line2+line3+line4+line5123445454;
     }
     
@@ -152,12 +165,14 @@ public class DriveModule extends Module{
     public void run(){
         while(true){
             if(enabled){
-                setPower(leftPower, rightPower);
                 
                 if(autoMode){
-                    driveController.enable();
+                    setGear(false);
+                    updateS();
+                    lcont.setSetpoint(setpoint);
+                    rcont.setSetpoint(setpoint);
                 }else{
-                    driveController.disable();
+                    setPower(leftPower, rightPower);
                 }
                 
             }else{
@@ -167,37 +182,18 @@ public class DriveModule extends Module{
             Timer.delay(0.05);
         }
     }
-
-    /**
-     * deals with PIDOutput interface
-     * @author Ben Evans
-     */    
-     private class DriveOutput implements PIDOutput{
-         
-        /**
-         * sets drive to double d 
-         * @param d 
-         */
-         
-        public void pidWrite(double d) {
-            //not sure if this will work
-            drive(d, d);
-        }
-       
-    }    
-     
-    /**
-     * deals with PIDSource interface
-     * @author Ben Evans
-     */    
-     
-    private class DualEncoder implements PIDSource{
-        /**
-         * 
-         * @return encoder distance
-         */        
-        public double pidGet(){
-            return (lEncoder.getDistance() + rEncoder.getDistance()) / 2.0;
-        }
+        
+    public synchronized void updateS(){
+        error = lcont.get() - rcont.get();
+        s = error * ks;
+    }
+    
+    public synchronized void setStraightConstant(double ks){
+        this.ks = ks;
+    }
+    
+    public synchronized void setPID(double p, double i, double d){
+        lcont.setPID(p, i, d);
+        rcont.setPID(p, i, d);
     }
 }
