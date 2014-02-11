@@ -36,12 +36,8 @@ public class ArmModule extends Module implements PIDOutput {
      * sets the roller on or off
      * @param on state of the roller
      */
-    public synchronized void setRoller(boolean on){
-        if(on){
-            roller.set(ArmConfig.ROLLER_SPEED);
-        }else{
-            roller.set(0);
-        }
+    public synchronized void setRoller(double value){
+        roller.set(value);
     }
     
     /**

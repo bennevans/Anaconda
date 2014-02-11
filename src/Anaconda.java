@@ -57,10 +57,11 @@ public class Anaconda extends IterativeRobot {
     
     
     public void robotInit(){
+        System.out.println("robotInit()");
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.SOLENOID_PORT);
-        shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.ROLLER, ShooterConfig.SHIFTER, ShooterConfig.WINCH1, ShooterConfig.WINCH2, ShooterConfig.TOUCH_SENSOR);
+        shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.WINCH_SHIFTER, ShooterConfig.WINCH_VICTOR1, ShooterConfig.WINCH_VICTOR2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
-        armModule = new ArmModule(ArmConfig.ARM_VICTOR_ONE, ArmConfig.ARM_VICTOR_TWO, ArmConfig.ROLLER_VICTOR_ONE, ArmConfig.ROLLER_VICTOR_TWO, ArmConfig.POT_PORT);
+        armModule = new ArmModule(ArmConfig.ARM_VICTOR, ArmConfig.ROLLER_VICTOR, ArmConfig.POT_PORT);
         
         lJoy = new Joystick(1);
         rJoy = new Joystick(2);
@@ -78,15 +79,18 @@ public class Anaconda extends IterativeRobot {
             logps = null;
         }
         
-        
-    }
-
-    public void startCompetition(){
         driveModule.start();
         shooterModule.start();
         compressorModule.start();
         armModule.start();
         systemTime.start();
+        
+        System.out.println("robotInit() done");
+    }
+
+    public void startCompetition(){
+        System.out.println("startCompetition()");
+
     }
 
     public void disabledInit(){
@@ -111,7 +115,7 @@ public class Anaconda extends IterativeRobot {
         armModule.enable();
         
         //Move forward
-        driveModule.setDistance(0.0);
+        driveModule.setSetpoint(0.0);
         Timer.delay(0.0);
         //shoot
         shooterModule.shoot();
@@ -130,13 +134,8 @@ public class Anaconda extends IterativeRobot {
     }
 
     public void teleopPeriodic(){
-        
         double leftPower = lJoy.getY();
         double rightPower = rJoy.getY();
-        
-        if(rJoy.getRawButton(RobotConfig.REVERSE_BUTTON) != reverseButtonLastState)
-            reverseButtonCounter++;
-        reverseButtonLastState = rJoy.getRawButton(RobotConfig.REVERSE_BUTTON);
         
         if(reverseButtonCounter % 4 == 0)
             driveModule.drive(leftPower, rightPower);
@@ -156,15 +155,45 @@ public class Anaconda extends IterativeRobot {
             shooterModule.shoot();
         
         if(lJoy.getRawButton(RobotConfig.ROLLER_BUTTON))
-            armModule.setRoller(true);
+            armModule.setRoller(1.0);
         else
-            armModule.setRoller(false);
+            armModule.setRoller(0);
         
         log();
 
     }
     
+    public void testInit(){
+        System.out.println("testInit()");
+        shooterModule.disable();
+        driveModule.enable();
+        armModule.enable();
+        compressorModule.enable();
+        
+        driveModule.setAutoModeOff();
+    }
     
+    int testShiftCounter = 0;
+    boolean lastTestShiftState = false;
+    
+    public void testPeriodic(){
+        
+        if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
+            testShiftCounter++;
+        lastTestShiftState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
+        
+        if(testShiftCounter % 4 == 0)
+            driveModule.setGear(true);
+        else if(testShiftCounter %2 == 0)
+            driveModule.setGear(false);
+        
+        driveModule.drive(lJoy.getY(), rJoy.getY());
+        
+        armModule.setRoller(xbox.getLY());
+        shooterModule.setIntake(xbox.getBack());
+        
+        Timer.delay(0.05);
+    }   
     
     public void log(){
         if(logFile == null || logps == null)

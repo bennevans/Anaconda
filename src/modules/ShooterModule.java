@@ -16,7 +16,6 @@ public class ShooterModule extends Module{
     
     private Solenoid lifter;
     private Solenoid shifter;
-    private Victor roller;
     private Victor winch1, winch2;
     private DigitalInput winchSensor;
     
@@ -31,15 +30,13 @@ public class ShooterModule extends Module{
 /**
  * the constructor for this class
  * @param lift
- * @param roll
  * @param shift
  * @param win1
  * @param win2
  * @param button 
  */    
-    public ShooterModule(int lift, int roll, int shift, int win1, int win2, int button){
+    public ShooterModule(int lift, int shift, int win1, int win2, int button){
         lifter = new Solenoid(lift);
-        roller = new Victor(roll);
         shifter = new Solenoid(shift);
         winch1 = new Victor(win1);
         winch2 = new Victor(win2);
@@ -67,6 +64,11 @@ public class ShooterModule extends Module{
     public boolean isReady(){
         return mode == READY;
     }
+    
+    public void setIntake(boolean up){
+        lifter.set(up);
+    }
+    
 /**
  * handles shooter state
  */ 
@@ -115,12 +117,11 @@ public class ShooterModule extends Module{
     }
     
     public String getLogData(){
-        String line1 = "\t\t<data name=\"rollerState\" value=\""+roller.get()+"\">\n";
-        String line2 = "\t\t<data name=\"lifter\" value=\""+(lifter.get() ? "ON" : "OFF")+"\">\n";
-        String line3 = "\t\t<data name=\"dog\" value=\""+(shifter.get() ? "ON" : "OFF")+"\">\n";
-        String line4 = "\t\t<data name=\"winch\" value=\""+winch1.get()+"\">\n";
-        String line5 = "\t\t<data name=\"state\" value=\""+getState()+"\">";
-        return line1+line2+line3+line4+line5;
+        String line1 = "\t\t<data name=\"lifter\" value=\""+(lifter.get() ? "ON" : "OFF")+"\">\n";
+        String line2 = "\t\t<data name=\"dog\" value=\""+(shifter.get() ? "ON" : "OFF")+"\">\n";
+        String line3 = "\t\t<data name=\"winch\" value=\""+winch1.get()+"\">\n";
+        String line4 = "\t\t<data name=\"state\" value=\""+getState()+"\">";
+        return line1+line2+line3+line4;
     }
     
 /**

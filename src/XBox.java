@@ -43,25 +43,25 @@ public class XBox extends Joystick{
     public boolean getBack(){
         return getRawButton(7);
     }
-    public double rT(){
+    public double getRT(){
         return getRawAxis(3);
     }
-    public double lT(){
+    public double getLT(){
         return getRawAxis(3);
     }
-    public double rX(){
+    public double getRX(){
         return getRawAxis(4);
     }
-    public double rY(){
+    public double getRY(){
         return getRawAxis(5);
     }
-    public double lY(){
+    public double getLY(){
         return getRawAxis(2);
     }
-    public double lX(){
+    public double getLX(){
         return getRawAxis(1);
     }
-    public double pX(){
+    public double getPX(){
         return getRawAxis(6);
     }
 //    public double pY(){
