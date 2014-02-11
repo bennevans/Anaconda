@@ -14,10 +14,6 @@ public class DriveConfig {
     public static final double DISTANCE_PER_TICK = 0.0;
     public static final int LEFT_ENCODER_A = 0, LEFT_ENCODER_B = 0;
     public static final int RIGHT_ENCODER_A = 0, RIGHT_ENCODER_B = 0;
-    public static final int GYRO = 0;
-    
-    //PID constants
-    public static final int GYRO_P = 0, GYRO_I = 0, GYRO_D = 0;
-    public static final int ENCODER_P = 0, ENCODER_I = 0, ENCODER_D = 0;
-    
+    public static final double KP = 0, KI = 0, KD = 0, KS = 0;
+    public static final int SOLENOID_PORT = 0;
 }
