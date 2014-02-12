@@ -20,7 +20,7 @@ import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
 import com.sun.squawk.microedition.io.FileConnection;
-import java.io.IOException;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.PrintStream;
 import javax.microedition.io.Connector;
 import modules.CompressorModule;
@@ -70,10 +70,10 @@ public class Anaconda extends IterativeRobot {
         systemTime = new Timer();
         
         try {
-            logFile = (FileConnection) Connector.open("logfile.xml", Connector.WRITE);
+            logFile = (FileConnection) Connector.open("file:///logfile.xml", Connector.WRITE);
             logps = new PrintStream(logFile.openOutputStream());
             logps.println("<?xml version=\"1.0\"?>");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             System.err.println("Error Opening logfile!");
             logFile = null;
             logps = null;
@@ -85,14 +85,11 @@ public class Anaconda extends IterativeRobot {
         armModule.start();
         systemTime.start();
         
+        
+        
         System.out.println("robotInit() done");
     }
-
-    public void startCompetition(){
-        System.out.println("startCompetition()");
-
-    }
-
+    
     public void disabledInit(){
         driveModule.disable();
         shooterModule.disable();
@@ -105,7 +102,8 @@ public class Anaconda extends IterativeRobot {
     }
 
     public void disabledPeriodic(){
-
+        System.out.println("disabled...");
+        Timer.delay(0.5);
     }
 
     public void autonomousInit(){
@@ -176,6 +174,8 @@ public class Anaconda extends IterativeRobot {
     int testShiftCounter = 0;
     boolean lastTestShiftState = false;
     
+    int infoCounter = 0;
+    
     public void testPeriodic(){
         
         if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
@@ -187,12 +187,21 @@ public class Anaconda extends IterativeRobot {
         else if(testShiftCounter %2 == 0)
             driveModule.setGear(false);
         
-        driveModule.drive(lJoy.getY(), rJoy.getY());
+        driveModule.drive(-lJoy.getY(), -rJoy.getY());
         
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getBack());
         
+        
+        if(infoCounter % 10 == 0)
+            System.out.println(driveModule.toString());
+        
+        infoCounter++;
+        
+        
         Timer.delay(0.05);
+        
+        
     }   
     
     public void log(){

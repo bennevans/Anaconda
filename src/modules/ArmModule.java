@@ -27,7 +27,7 @@ public class ArmModule extends Module implements PIDOutput {
      * @param potPort potentiometer port
      */
     
-    public ArmModule(int rollerPort, int armPort, int potPort){
+    public ArmModule(int armPort, int rollerPort, int potPort){
        pot = new AnalogPotentiometer(potPort);
        controller = new PIDController(ArmConfig.p, ArmConfig.i, ArmConfig.d,pot,this);
        roller = new Victor(rollerPort);
