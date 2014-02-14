@@ -26,6 +26,10 @@ public class ShooterModule extends Module{
     public static int RELOADING = 3;
     
     private int mode;
+    private boolean manual = true;
+    private double winchPower = 0;
+    private boolean shifterGear = true;
+    
     
 /**
  * the constructor for this class
@@ -69,6 +73,18 @@ public class ShooterModule extends Module{
         lifter.set(up);
     }
     
+    public synchronized void setManual(boolean man){
+        this.manual = man;
+    }
+    
+    public synchronized void setWinchPower(double power){
+        this.winchPower = power;
+    }
+    
+    public synchronized void setGear(boolean engaged){
+        this.shifterGear = engaged;
+    }
+    
 /**
  * handles shooter state
  */ 
@@ -77,32 +93,39 @@ public class ShooterModule extends Module{
         
         while(true){
             if(enabled){
-                //state machine
-                if(mode == READY){
-                    stateTimer = System.currentTimeMillis();
-                }else if(mode == LIFTING_PNEUMATIC){
-                    lifter.set(true);
-                    if((System.currentTimeMillis() - stateTimer) > 1000){
-                        mode = SHOOTING;
-                        stateTimer = System.currentTimeMillis();
-                    }
-                }else if(mode == SHOOTING){
-                    shifter.set(false);
-                    if((System.currentTimeMillis() - stateTimer) > 1000){
-                        shifter.set(true);
-                        mode = RELOADING;
-                        stateTimer = System.currentTimeMillis();
-                    }
-                }else if(mode == RELOADING){
-                    lifter.set(false);
-                    winch1.set(ShooterConfig.WINCH_SPEED);
-                    winch2.set(ShooterConfig.WINCH_SPEED);
-                    if(winchSensor.get())
-                        mode = READY;
-                }else{
-                    //problem
-                }
+                if(manual){
 
+                }else{
+                //state machine
+                    if(mode == READY){
+                        stateTimer = System.currentTimeMillis();
+                    }else if(mode == LIFTING_PNEUMATIC){
+                        lifter.set(true);
+                        if((System.currentTimeMillis() - stateTimer) > 1000){
+                            mode = SHOOTING;
+                            stateTimer = System.currentTimeMillis();
+                        }
+                    }else if(mode == SHOOTING){
+                        shifter.set(false);
+                        if((System.currentTimeMillis() - stateTimer) > 1000){
+                            shifter.set(true);
+                            mode = RELOADING;
+                            stateTimer = System.currentTimeMillis();
+                        }
+                    }else if(mode == RELOADING){
+                        lifter.set(false);
+                        winch1.set(ShooterConfig.WINCH_SPEED);
+                        winch2.set(ShooterConfig.WINCH_SPEED);
+                        if(winchSensor.get())
+                            mode = READY;
+                    }else{
+                        //problem
+                    }
+                }
+                
+                winch1.set(winchPower);
+                winch2.set(winchPower);
+                shifter.set(shifterGear);
             }
             Timer.delay(0.05);
         }
@@ -113,7 +136,7 @@ public class ShooterModule extends Module{
  */    
     public String toString()
     {
-        return "Winch Charge Status:" + winchSensor.get() + "State:" + getState();
+        return "Winch Charge Status: " + winchSensor.get() + " State: " + getState() + " Winch: " + winchPower;
     }
     
     public String getLogData(){

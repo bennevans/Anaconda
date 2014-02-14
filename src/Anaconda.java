@@ -20,7 +20,6 @@ import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
 import com.sun.squawk.microedition.io.FileConnection;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import java.io.PrintStream;
 import javax.microedition.io.Connector;
 import modules.CompressorModule;
@@ -69,14 +68,16 @@ public class Anaconda extends IterativeRobot {
         
         systemTime = new Timer();
         
-        try {
-            logFile = (FileConnection) Connector.open("file:///logfile.xml", Connector.WRITE);
-            logps = new PrintStream(logFile.openOutputStream());
-            logps.println("<?xml version=\"1.0\"?>");
-        } catch (Exception ex) {
-            System.err.println("Error Opening logfile!");
-            logFile = null;
-            logps = null;
+        if(RobotConfig.LOGGING){
+            try {
+                logFile = (FileConnection) Connector.open("file:///logfile.xml", Connector.WRITE);
+                logps = new PrintStream(logFile.openOutputStream());
+                logps.println("<?xml version=\"1.0\"?>");
+            } catch (Exception ex) {
+                System.err.println("Error Opening logfile!");
+                logFile = null;
+                logps = null;
+            }
         }
         
         driveModule.start();
@@ -84,7 +85,6 @@ public class Anaconda extends IterativeRobot {
         compressorModule.start();
         armModule.start();
         systemTime.start();
-        
         
         
         System.out.println("robotInit() done");
@@ -95,12 +95,15 @@ public class Anaconda extends IterativeRobot {
         shooterModule.disable();
         compressorModule.disable();
         armModule.disable();
+    }
+
+    public void reset(){
         driveModule.reset();
         shooterModule.reset();
         compressorModule.reset();
         armModule.reset();
     }
-
+    
     public void disabledPeriodic(){
         System.out.println("disabled...");
         Timer.delay(0.5);
@@ -126,58 +129,20 @@ public class Anaconda extends IterativeRobot {
     
     public void teleopInit(){
         shooterModule.enable();
-        driveModule.enable();
-        compressorModule.enable();
-        armModule.enable();
-    }
-
-    public void teleopPeriodic(){
-        double leftPower = lJoy.getY();
-        double rightPower = rJoy.getY();
-        
-        if(reverseButtonCounter % 4 == 0)
-            driveModule.drive(leftPower, rightPower);
-        else if(reverseButtonCounter % 2 == 0)
-            driveModule.drive(-rightPower,-leftPower);
-        
-        if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != shiftButtonLastState)
-            shifterButtonCounter++;
-        shiftButtonLastState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
-        
-        if(shifterButtonCounter % 4 == 0)
-            driveModule.setGear(true);
-        else if(shifterButtonCounter % 2 == 0)
-            driveModule.setGear(false);
-        
-        if((rJoy.getTrigger() || xbox.getRB()) && shooterModule.isReady())
-            shooterModule.shoot();
-        
-        if(lJoy.getRawButton(RobotConfig.ROLLER_BUTTON))
-            armModule.setRoller(1.0);
-        else
-            armModule.setRoller(0);
-        
-        log();
-
-    }
-    
-    public void testInit(){
-        System.out.println("testInit()");
-        shooterModule.disable();
+        shooterModule.setManual(true);
         driveModule.enable();
         armModule.enable();
         compressorModule.enable();
         
         driveModule.setAutoModeOff();
     }
-    
+
     int testShiftCounter = 0;
     boolean lastTestShiftState = false;
     
     int infoCounter = 0;
     
-    public void testPeriodic(){
-        
+    public void teleopPeriodic(){
         if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
             testShiftCounter++;
         lastTestShiftState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
@@ -192,14 +157,25 @@ public class Anaconda extends IterativeRobot {
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getBack());
         
+        shooterModule.setWinchPower(xbox.getRY());
+        shooterModule.setGear(xbox.getRB());
         
         if(infoCounter % 10 == 0)
-            System.out.println(driveModule.toString());
+            System.out.println(shooterModule.toString());
         
         infoCounter++;
         
         
         Timer.delay(0.05);
+        
+
+    }
+    
+    public void testInit(){
+        
+    }
+    
+    public void testPeriodic(){
         
         
     }   
