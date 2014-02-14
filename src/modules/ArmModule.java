@@ -76,7 +76,7 @@ public class ArmModule extends Module implements PIDOutput {
                 controller.reset();
             }
             
-            Timer.delay(0.1);
+            Timer.delay(0.05);
         }
     }
     /**

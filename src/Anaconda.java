@@ -20,6 +20,7 @@ import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
 import com.sun.squawk.microedition.io.FileConnection;
+import edu.wpi.first.wpilibj.Watchdog;
 import java.io.PrintStream;
 import javax.microedition.io.Connector;
 import modules.CompressorModule;
@@ -86,6 +87,7 @@ public class Anaconda extends IterativeRobot {
         armModule.start();
         systemTime.start();
         
+        Watchdog.getInstance().setEnabled(false);
         
         System.out.println("robotInit() done");
     }
