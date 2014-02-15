@@ -28,7 +28,6 @@ public class CompressorModule extends Module {
      */
     public void run(){
         compressor.start();
-        
     }
     /**
      * @return compressor state as string

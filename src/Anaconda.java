@@ -88,6 +88,7 @@ public class Anaconda extends IterativeRobot {
         systemTime.start();
         
         Watchdog.getInstance().setEnabled(false);
+        Watchdog.getInstance().kill();
         
         System.out.println("robotInit() done");
     }
@@ -145,6 +146,7 @@ public class Anaconda extends IterativeRobot {
     int infoCounter = 0;
     
     public void teleopPeriodic(){
+        
         if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
             testShiftCounter++;
         lastTestShiftState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
@@ -162,12 +164,12 @@ public class Anaconda extends IterativeRobot {
         shooterModule.setWinchPower(xbox.getRY());
         shooterModule.setGear(xbox.getRB());
         
-        if(infoCounter % 10 == 0)
+        if(infoCounter % 10 == 0){
             System.out.println(shooterModule.toString());
-        
+            System.out.println(Watchdog.getInstance().getEnabled());
+        }
         infoCounter++;
-        
-        
+                
         Timer.delay(0.05);
         
 
@@ -177,8 +179,12 @@ public class Anaconda extends IterativeRobot {
         
     }
     
+    int testCounter = 0;
+    
     public void testPeriodic(){
         
+        if(testCounter % 50 == 0)
+            System.out.println(armModule);
         
     }   
     

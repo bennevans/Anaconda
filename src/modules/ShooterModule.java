@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Watchdog;
 
 /**
  * controls the shooter
@@ -127,6 +128,7 @@ public class ShooterModule extends Module{
                 winch2.set(winchPower);
                 shifter.set(shifterGear);
             }
+                        
             Timer.delay(0.05);
         }
     }

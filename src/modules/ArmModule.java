@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
+import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
@@ -75,6 +76,7 @@ public class ArmModule extends Module implements PIDOutput {
                 controller.disable();
                 controller.reset();
             }
+            
             
             Timer.delay(0.05);
         }
