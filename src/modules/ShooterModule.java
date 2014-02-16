@@ -3,6 +3,9 @@ package modules;
 
 import config.ShooterConfig;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
@@ -19,6 +22,9 @@ public class ShooterModule extends Module{
     private Solenoid shifter;
     private Victor winch1, winch2;
     private DigitalInput winchSensor;
+    private Encoder winchEncoder;
+    private PIDController winchController;
+    
     
     //TODO enums?
     public static int READY = 0;
@@ -40,13 +46,24 @@ public class ShooterModule extends Module{
  * @param win2
  * @param button 
  */    
-    public ShooterModule(int lift, int shift, int win1, int win2, int button){
+    public ShooterModule(int lift, int shift, int win1, int win2, int button, int encA, int encB){
         lifter = new Solenoid(lift);
         shifter = new Solenoid(shift);
         winch1 = new Victor(win1);
         winch2 = new Victor(win2);
         winchSensor = new DigitalInput(button);
+        winchEncoder = new Encoder(encA, encB);
+        
         mode = READY;
+        
+        winchController = new PIDController(ShooterConfig.KP, ShooterConfig.KI, ShooterConfig.KD, winchEncoder, new PIDOutput() {
+
+            public void pidWrite(double d) {
+                winch1.set(d);
+                winch2.set(d);
+            }
+        });
+        
     }
 /**
  * shoots, lifts Pneumatic
@@ -86,6 +103,10 @@ public class ShooterModule extends Module{
         this.shifterGear = engaged;
     }
     
+    public void setPID(double p, double i, double d){
+        winchController.setPID(p, i, d);
+    }
+    
 /**
  * handles shooter state
  */ 
@@ -95,9 +116,10 @@ public class ShooterModule extends Module{
         while(true){
             if(enabled){
                 if(manual){
-
+                    winchController.disable();
                 }else{
                 //state machine
+                    winchController.enable();
                     if(mode == READY){
                         stateTimer = System.currentTimeMillis();
                     }else if(mode == LIFTING_PNEUMATIC){
@@ -115,9 +137,7 @@ public class ShooterModule extends Module{
                         }
                     }else if(mode == RELOADING){
                         lifter.set(false);
-                        winchPower = ShooterConfig.WINCH_SPEED;
-//                        winch1.set(ShooterConfig.WINCH_SPEED);
-//                        winch2.set(ShooterConfig.WINCH_SPEED);
+                        winchController.setSetpoint(ShooterConfig.LOADED_TICKS);
                         if(winchSensor.get())
                             mode = READY;
                     }else{
