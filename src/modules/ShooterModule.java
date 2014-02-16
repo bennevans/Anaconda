@@ -63,6 +63,8 @@ public class ShooterModule extends Module{
                 winch2.set(d);
             }
         });
+     
+        winchController.setOutputRange(0, 1);
         
     }
 /**
@@ -120,6 +122,7 @@ public class ShooterModule extends Module{
                 }else{
                 //state machine
                     winchController.enable();
+                    
                     if(mode == READY){
                         stateTimer = System.currentTimeMillis();
                     }else if(mode == LIFTING_PNEUMATIC){
@@ -131,6 +134,7 @@ public class ShooterModule extends Module{
                     }else if(mode == SHOOTING){
                         shifter.set(false);
                         if((System.currentTimeMillis() - stateTimer) > 1000){
+                            winchController.setSetpoint(0);
                             shifter.set(true);
                             mode = RELOADING;
                             stateTimer = System.currentTimeMillis();
