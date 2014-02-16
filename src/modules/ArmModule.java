@@ -6,7 +6,6 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
-import edu.wpi.first.wpilibj.Watchdog;
 import edu.wpi.first.wpilibj.interfaces.Potentiometer;
 
 /**
@@ -29,10 +28,13 @@ public class ArmModule extends Module implements PIDOutput {
      */
     
     public ArmModule(int armPort, int rollerPort, int potPort){
-       pot = new AnalogPotentiometer(potPort);
+       pot = new AnalogPotentiometer(potPort); 
        controller = new PIDController(ArmConfig.p, ArmConfig.i, ArmConfig.d,pot,this);
        roller = new Victor(rollerPort);
        arm = new Victor(armPort);
+       
+       controller.setInputRange(0.75, 3.17);
+       controller.setOutputRange(-0.5, 0.25);
     }
     /**
      * sets the roller on or off
@@ -61,6 +63,11 @@ public class ArmModule extends Module implements PIDOutput {
        double setPositionB = setposition;
        controller.setSetpoint(setPositionB);
     }
+    
+    public synchronized void setArmPower(double armPower){
+        arm.set(armPower);
+    }
+    
     /**
      * handles arm controller
      */
@@ -99,7 +106,7 @@ public class ArmModule extends Module implements PIDOutput {
      * @return current field values as a string
      */
     public String toString(){
-        return "Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
+        return "P: " + controller.getP() + " D: " + controller.getD() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
     }
 
     /**

@@ -115,13 +115,18 @@ public class ShooterModule extends Module{
                         }
                     }else if(mode == RELOADING){
                         lifter.set(false);
-                        winch1.set(ShooterConfig.WINCH_SPEED);
-                        winch2.set(ShooterConfig.WINCH_SPEED);
+                        winchPower = ShooterConfig.WINCH_SPEED;
+//                        winch1.set(ShooterConfig.WINCH_SPEED);
+//                        winch2.set(ShooterConfig.WINCH_SPEED);
                         if(winchSensor.get())
                             mode = READY;
                     }else{
                         //problem
                     }
+                }
+                
+                if(winchSensor.get()){
+                    winchPower = 0;
                 }
                 
                 winch1.set(winchPower);

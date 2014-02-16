@@ -183,8 +183,24 @@ public class Anaconda extends IterativeRobot {
     
     public void testPeriodic(){
         
-        if(testCounter % 50 == 0)
+        if(rJoy.getTrigger()){
+            armModule.enable();
+            armModule.setPosition(1.96);
+        }else{
+            armModule.setPosition(3.9);
+            armModule.disable();
+            armModule.setArmPower(rJoy.getY());
+        }
+        
+        
+        if(testCounter % 10 == 0)
             System.out.println(armModule);
+        
+        armModule.setPID((rJoy.getZ()+1), 0.01, (lJoy.getZ() + 1)*2);
+        
+        testCounter++;
+        
+        Timer.delay(0.05);
         
     }   
     
