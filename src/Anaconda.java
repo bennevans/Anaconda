@@ -152,9 +152,9 @@ public class Anaconda extends IterativeRobot {
         lastTestShiftState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
         
         if(testShiftCounter % 4 == 0)
-            driveModule.setGear(true);
-        else if(testShiftCounter %2 == 0)
             driveModule.setGear(false);
+        else if(testShiftCounter %2 == 0)
+            driveModule.setGear(true);
         
         driveModule.drive(-lJoy.getY(), -rJoy.getY());
         
@@ -196,7 +196,7 @@ public class Anaconda extends IterativeRobot {
         if(testCounter % 10 == 0)
             System.out.println(armModule);
         
-        armModule.setPID((rJoy.getZ()+1), 0.01, (lJoy.getZ() + 1)*2);
+        armModule.setPID((rJoy.getZ()+1), 0.0, (lJoy.getZ() + 1)*7);
         
         testCounter++;
         
