@@ -87,6 +87,8 @@ public class Anaconda extends IterativeRobot {
         armModule.start();
         systemTime.start();
         
+        armModule.setPID(0.7, 0, 3.5);
+        
         Watchdog.getInstance().setEnabled(false);
         Watchdog.getInstance().kill();
         
@@ -108,7 +110,6 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void disabledPeriodic(){
-        System.out.println("disabled...");
         Timer.delay(0.5);
     }
 
@@ -145,6 +146,9 @@ public class Anaconda extends IterativeRobot {
     
     int infoCounter = 0;
     
+    int shootCounter = 0;
+    boolean lastShoot = false;
+    
     public void teleopPeriodic(){
         
         if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
@@ -161,12 +165,26 @@ public class Anaconda extends IterativeRobot {
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getBack());
         
-        shooterModule.setWinchPower(xbox.getRY());
-        shooterModule.setGear(xbox.getRB());
+        if(lastShoot != xbox.getRB())
+            shootCounter++;
+        lastShoot = xbox.getRB();
         
-        if(infoCounter % 10 == 0){
-            System.out.println(shooterModule.toString());
-            System.out.println(Watchdog.getInstance().getEnabled());
+        if(shootCounter % 4 == 0){
+            shooterModule.setManual(true);
+        }else if(shootCounter % 2 == 0){
+            shooterModule.setManual(false);
+            shooterModule.shoot();
+            shootCounter += 2;
+        }
+        
+        if(xbox.getB())
+            armModule.setPosition(1.96);
+        
+        if(xbox.getA())
+            armModule.setPosition(4);
+        
+        if(infoCounter % 5 == 0){
+            System.out.println(shooterModule.toString()+"\n"+armModule.toString());
         }
         infoCounter++;
                 
@@ -196,7 +214,7 @@ public class Anaconda extends IterativeRobot {
         if(testCounter % 10 == 0)
             System.out.println(armModule);
         
-        armModule.setPID((rJoy.getZ()+1), 0.0, (lJoy.getZ() + 1)*7);
+        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
         testCounter++;
         
