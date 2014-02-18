@@ -74,7 +74,7 @@ public class ShooterModule extends Module{
 /**
 0 * handles shooter state
  */ 
-    public synchronized void run(){
+    public void run(){
         
         while(true){
             
