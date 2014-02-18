@@ -39,35 +39,13 @@ public class ShooterModule extends Module{
         winch1 = new Victor(win1);
         winch2 = new Victor(win2);
         winchSensor = new DigitalInput(button);
-        
-        mode = READY;
     }
 /**
  * shoots, lifts Pneumatic
  */
     public synchronized void shoot(){
-        
-        lifter.set(true);
-        Timer.delay(1);
-        
-        shifter.set(true);
-        Timer.delay(1);
-        
-        shifter.set(false);
-        Timer.delay(1);
-        
-        while(winchSensor.get()){
-            winch1.set(ShooterConfig.WINCH_POWER);
-            winch2.set(ShooterConfig.WINCH_POWER);
-        }    
-        
-        winch1.set(0);
-        winch2.set(0);
-    }
-/**
- * 
- * @return mode == Ready 
- */    
+        shoot = true;
+    }  
 
     public synchronized void setIntake(boolean up){
         lifterState = up;
@@ -85,39 +63,79 @@ public class ShooterModule extends Module{
         this.shifterGear = engaged;
     }
     
+    public synchronized boolean isButtonPressed(){
+        return winchSensor.get();
+    }
+    
+    public synchronized boolean isShooting(){
+        return shoot;
+    }
+    
 /**
- * handles shooter state
+0 * handles shooter state
  */ 
-    public void run(){
+    public synchronized void run(){
         
         while(true){
             
-            if(!winchSensor.get()){
-                winch1.set(0);
-                winch2.set(0);
+            if(winchPower > 0 && isButtonPressed()){
+                winchPower = 0;
             }
 
             if(enabled){
+                
+                if(manual){
+                    
+                    lifter.set(lifterState);
+                    winch1.set(winchPower);
+                    winch2.set(winchPower);
+                }else if(shoot){
+                    
+                    System.out.println("*****************SHOOTING*****************");
+                    
+                    lifter.set(true);
+                    Timer.delay(0.25);
 
+                    shifter.set(true);
+                    Timer.delay(1);
+
+                    shifter.set(false);
+                    Timer.delay(1);
+
+                    lifter.set(false);
+                    
+                    while(!isButtonPressed()){
+                        winch1.set(ShooterConfig.WINCH_POWER);
+                        winch2.set(ShooterConfig.WINCH_POWER);
+                    }    
+
+                    winch1.set(0);
+                    winch2.set(0);
+                    
+                    shoot = false;
+                    
+                    System.out.println("*****************DONE SHOOTING*****************");
+                }
             }
+            
             Timer.delay(0.05);
+            
         }
     }
 /**
  * 
  * @return winch charge status and state 
  */    
-    public String toString()
+    public synchronized String toString()
     {
-        return "Button: " + !winchSensor.get() + " State: " + getState() + " Winch: " + winch1.get() + " manual: " + manual + " shift: " + shifterGear + " lifter: " +lifterState + " shoot: " + shoot;
+        return "Button: " + isButtonPressed() + " Winch: " + winch1.get() + " manual: " + manual + " shift: " + shifterGear + " lifter: " +lifterState + " shoot: " + shoot;
     }
     
     public String getLogData(){
         String line1 = "\t\t<data name=\"lifter\" value=\""+(lifter.get() ? "ON" : "OFF")+"\">\n";
         String line2 = "\t\t<data name=\"dog\" value=\""+(shifter.get() ? "ON" : "OFF")+"\">\n";
         String line3 = "\t\t<data name=\"winch\" value=\""+winch1.get()+"\">\n";
-        String line4 = "\t\t<data name=\"state\" value=\""+getState()+"\">";
-        return line1+line2+line3+line4;
+        return line1+line2+line3;
     }
     
 }

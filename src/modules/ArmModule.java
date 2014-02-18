@@ -33,13 +33,10 @@ public class ArmModule extends Module implements PIDOutput {
        roller = new Victor(rollerPort);
        arm = new Victor(armPort);
        
-       controller.setInputRange(0.75, 3.17);
+       controller.setInputRange(ArmConfig.ARM_MIN, ArmConfig.ARM_MAX);
        controller.setOutputRange(-1, 1);
     }
-    /**
-     * sets the roller on or off
-     * @param on state of the roller
-     */
+
     public synchronized void setRoller(double value){
         roller.set(value);
     }

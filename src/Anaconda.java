@@ -57,7 +57,9 @@ public class Anaconda extends IterativeRobot {
     
     
     public void robotInit(){
+        
         System.out.println("robotInit()");
+        
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.SOLENOID_PORT);
         shooterModule = new ShooterModule(ShooterConfig.LIFTER, ShooterConfig.WINCH_SHIFTER, ShooterConfig.WINCH_VICTOR1, ShooterConfig.WINCH_VICTOR2, ShooterConfig.TOUCH_SENSOR);
         compressorModule = new CompressorModule(CompressorConfig.COMPRESSOR_RELAY_CHANNEL, CompressorConfig.PRESSURE_SWITCH_CHANNEL);
@@ -92,7 +94,6 @@ public class Anaconda extends IterativeRobot {
         Watchdog.getInstance().setEnabled(false);
         Watchdog.getInstance().kill();
         
-        System.out.println("robotInit() done");
     }
     
     public void disabledInit(){
@@ -132,6 +133,7 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void teleopInit(){
+        System.out.println("teleopInit()");
         shooterModule.enable();
         shooterModule.setManual(true);
         driveModule.enable();
@@ -141,47 +143,75 @@ public class Anaconda extends IterativeRobot {
         driveModule.setAutoModeOff();
     }
 
-    int testShiftCounter = 0;
-    boolean lastTestShiftState = false;
-    
     int infoCounter = 0;
     
     int shootCounter = 0;
     boolean lastShoot = false;
     
+    int dshootCounter = 0;
+    boolean dlastShoot = false;
+    
+    boolean gear = false;
+    
     public void teleopPeriodic(){
         
-        if(rJoy.getRawButton(RobotConfig.SHIFT_BUTTON) != lastTestShiftState)
-            testShiftCounter++;
-        lastTestShiftState = rJoy.getRawButton(RobotConfig.SHIFT_BUTTON);
+        if(rJoy.getRawButton(5))
+            gear = true;
+        else if(rJoy.getRawButton(4))
+            gear = false;
         
-        if(testShiftCounter % 4 == 0)
-            driveModule.setGear(false);
-        else if(testShiftCounter %2 == 0)
-            driveModule.setGear(true);
+        driveModule.setGear(gear);
         
         driveModule.drive(-lJoy.getY(), -rJoy.getY());
         
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getBack());
-        
+                
+        if(rJoy.getRawButton(9))
+            shooterModule.setWinchPower(ShooterConfig.WINCH_POWER);
+        else if(rJoy.getRawButton(8))
+            shooterModule.setWinchPower(-ShooterConfig.WINCH_POWER/2.0);
+        else
+            shooterModule.setWinchPower(0);
+         
         if(lastShoot != xbox.getRB())
             shootCounter++;
         lastShoot = xbox.getRB();
         
+        if(dlastShoot != rJoy.getTrigger())
+            dshootCounter++;
+        dlastShoot = rJoy.getTrigger();
+        
         if(shootCounter % 4 == 0){
             shooterModule.setManual(true);
         }else if(shootCounter % 2 == 0){
-            shooterModule.setManual(false);
-            shooterModule.shoot();
+            if(xbox.getLB() && !shooterModule.isShooting()){
+                System.out.println("XBOX SHOOT");
+                shooterModule.setManual(false);
+                shooterModule.shoot();
+            }                    
             shootCounter += 2;
         }
         
+        if(dshootCounter % 4 == 0){
+            shooterModule.setManual(true);
+        }else if(dshootCounter % 2 == 0){
+            if(lJoy.getTrigger() && !shooterModule.isShooting()){
+                System.out.println("JOYSTICK SHOOT");
+                shooterModule.setManual(false);
+                shooterModule.shoot();
+            }                    
+            dshootCounter += 2;
+        }
+        
         if(xbox.getB())
-            armModule.setPosition(1.96);
+            armModule.setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.85);
         
         if(xbox.getA())
-            armModule.setPosition(4);
+            armModule.setPosition(ArmConfig.ARM_MAX);
+        
+        if(xbox.getYb())
+            armModule.setPosition(ArmConfig.ARM_MIN);
         
         if(infoCounter % 5 == 0){
             System.out.println(shooterModule.toString()+"\n"+armModule.toString());
@@ -194,27 +224,26 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void testInit(){
-        
+        armModule.disable();
     }
     
     int testCounter = 0;
     
     public void testPeriodic(){
         
-        if(rJoy.getTrigger()){
-            armModule.enable();
-            armModule.setPosition(1.96);
-        }else{
-            armModule.setPosition(3.9);
-            armModule.disable();
-            armModule.setArmPower(rJoy.getY());
-        }
+//        if(rJoy.getTrigger()){
+//            armModule.enable();
+//            armModule.setPosition(1.96);
+//        }else{
+//            armModule.setPosition(3.9);
+//            armModule.disable();
+//            armModule.setArmPower(rJoy.getY());
+//        }
+//                
+        if(testCounter % 50 == 0)
+            System.out.println("hi");
         
-        
-        if(testCounter % 10 == 0)
-            System.out.println(armModule);
-        
-        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
+//        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
         testCounter++;
         
