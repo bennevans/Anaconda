@@ -69,7 +69,7 @@ public class DriveModule extends Module{
 
             public void pidWrite(double d) {
                 rVictor1.set(-d + s);
-                lVictor2.set(-d + s);
+                rVictor2.set(-d + s);
             }
         });
         

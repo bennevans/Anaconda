@@ -98,6 +98,7 @@ public class Anaconda extends IterativeRobot {
     
     public void disabledInit(){
         driveModule.disable();
+        driveModule.reset();
         shooterModule.disable();
         compressorModule.disable();
         armModule.disable();
