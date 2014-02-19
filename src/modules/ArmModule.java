@@ -20,6 +20,8 @@ public class ArmModule extends Module implements PIDOutput {
     private Potentiometer pot;
     private Victor roller, arm;
     
+    private double armPower = 0, setPoint;
+    
     /**
      *  Constructor for ArmModule
      * @param rollerPort roller port
@@ -57,12 +59,11 @@ public class ArmModule extends Module implements PIDOutput {
      */
     public synchronized void setPosition(double setposition)
     {
-       double setPositionB = setposition;
-       controller.setSetpoint(setPositionB);
+       this.setPoint = setposition;
     }
     
     public synchronized void setArmPower(double armPower){
-        arm.set(armPower);
+        this.armPower = armPower;
     }
     
     /**
@@ -74,11 +75,13 @@ public class ArmModule extends Module implements PIDOutput {
             if(enabled)
             {
                 controller.enable();
+                controller.setSetpoint(setPoint);
             }
             else
             {
                 controller.disable();
                 controller.reset();
+                arm.set(armPower);
             }
             
             

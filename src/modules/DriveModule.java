@@ -19,7 +19,7 @@ public class DriveModule extends Module{
     
     private PIDController lcont, rcont;
     double setpoint = 0;
-    private double ks, s;
+    private double ks = 0, s = 0;
     private double error = 0;
          
     /**
@@ -74,6 +74,10 @@ public class DriveModule extends Module{
         });
         
         ks = DriveConfig.KS;
+        
+        lcont.setOutputRange(-0.5, 0.5);
+        rcont.setOutputRange(-0.5, 0.5);
+        
     }
     /**
      * starts encoder and sets distance
@@ -85,6 +89,12 @@ public class DriveModule extends Module{
         rEncoder.setDistancePerPulse(distancePerPulse);
         rEncoder.setReverseDirection(true);
     }
+    
+    public synchronized void disablePID(){
+        lcont.disable();
+        rcont.disable();
+    }
+    
     /**
      * resets encoder, drive controller
      */    
@@ -104,6 +114,8 @@ public class DriveModule extends Module{
      */    
     public void reset(){
         resetEncoders();
+        lcont.reset();
+        rcont.reset();
     }
     /**
      * sets victors 
@@ -169,9 +181,15 @@ public class DriveModule extends Module{
                 if(autoMode){
                     setGear(false);
                     updateS();
+                    lcont.enable();
+                    rcont.enable();
                     lcont.setSetpoint(setpoint);
                     rcont.setSetpoint(setpoint);
                 }else{
+                    lcont.disable();
+                    rcont.disable();
+                    lcont.setSetpoint(0);
+                    rcont.setSetpoint(0);
                     setPower(leftPower, rightPower);
                 }
                 
@@ -195,5 +213,10 @@ public class DriveModule extends Module{
     public synchronized void setPID(double p, double i, double d){
         lcont.setPID(p, i, d);
         rcont.setPID(p, i, d);
+    }
+    
+    public synchronized String toString(){
+        return "Left: " + lVictor1.get() + " Right: " + rVictor1.get() + " Auto: " + autoMode + " LTicks: " + lEncoder.get() + " RTicks: " + rEncoder.get() 
+                + " Distance: " + lEncoder.getDistance() + " Setpoint: " + rcont.getSetpoint() + " P: " + lcont.getP() + " I: " + lcont.getI() + " D: " + lcont.getD();
     }
 }

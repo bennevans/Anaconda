@@ -148,8 +148,8 @@ public class Anaconda extends IterativeRobot {
     int shootCounter = 0;
     boolean lastShoot = false;
     
-    int dshootCounter = 0;
-    boolean dlastShoot = false;
+//    int dshootCounter = 0;
+//    boolean dlastShoot = false;
     
     boolean gear = false;
     
@@ -178,9 +178,9 @@ public class Anaconda extends IterativeRobot {
             shootCounter++;
         lastShoot = xbox.getRB();
         
-        if(dlastShoot != rJoy.getTrigger())
-            dshootCounter++;
-        dlastShoot = rJoy.getTrigger();
+//        if(dlastShoot != rJoy.getTrigger())
+//            dshootCounter++;
+//        dlastShoot = rJoy.getTrigger();
         
         if(shootCounter % 4 == 0){
             shooterModule.setManual(true);
@@ -192,17 +192,17 @@ public class Anaconda extends IterativeRobot {
             }                    
             shootCounter += 2;
         }
-        
-        if(dshootCounter % 4 == 0){
-            shooterModule.setManual(true);
-        }else if(dshootCounter % 2 == 0){
-            if(lJoy.getTrigger() && !shooterModule.isShooting()){
-                System.out.println("JOYSTICK SHOOT");
-                shooterModule.setManual(false);
-                shooterModule.shoot();
-            }                    
-            dshootCounter += 2;
-        }
+//        
+//        if(dshootCounter % 4 == 0){
+//            shooterModule.setManual(true);
+//        }else if(dshootCounter % 2 == 0){
+//            if(lJoy.getTrigger() && !shooterModule.isShooting()){
+//                System.out.println("JOYSTICK SHOOT");
+//                shooterModule.setManual(false);
+//                shooterModule.shoot();
+//            }                    
+//            dshootCounter += 2;
+//        }
         
         if(xbox.getB())
             armModule.setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.85);
@@ -224,7 +224,12 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void testInit(){
-        armModule.disable();
+        armModule.enable();
+        driveModule.enable();
+        driveModule.setAutoModeOn();
+        shooterModule.enable();
+        compressorModule.enable();
+        armModule.setPosition(ArmConfig.ARM_MIN);
     }
     
     int testCounter = 0;
@@ -239,9 +244,21 @@ public class Anaconda extends IterativeRobot {
 //            armModule.disable();
 //            armModule.setArmPower(rJoy.getY());
 //        }
-//                
-        if(testCounter % 50 == 0)
-            System.out.println("hi");
+        
+        driveModule.setPID(rJoy.getZ()+1, 0, lJoy.getZ()+1);
+        
+        driveModule.setGear(false);
+        
+        if(lJoy.getTrigger())
+            driveModule.reset();
+        
+        if(rJoy.getTrigger())
+            driveModule.setSetpoint(5);
+        else
+            driveModule.setSetpoint(0);
+            
+        if(testCounter % 20 == 0)
+            System.out.println(driveModule.toString());
         
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
