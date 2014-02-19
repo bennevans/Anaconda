@@ -27,7 +27,7 @@ import modules.CompressorModule;
 
 /**
  * It is the mother of all classes that starts everything
- * @author Ben Evans
+        * @author Ben Evans
  * @author Ankith Uppundda
  */
 public class Anaconda extends IterativeRobot {
@@ -116,17 +116,25 @@ public class Anaconda extends IterativeRobot {
     }
 
     public void autonomousInit(){
-        shooterModule.enable();
-        driveModule.enable();
+        System.out.println("autonomousInit()");
         compressorModule.enable();
         armModule.enable();
+        shooterModule.enable();
+        shooterModule.setManual(false);
+        driveModule.enable();
+        driveModule.setAutoModeOn();
         
         //Move forward
-        driveModule.setSetpoint(0.0);
-        Timer.delay(0.0);
+        System.out.println("Moving");
+        driveModule.setSetpoint(10);
+        Timer.delay(5);
+        System.out.println("Setting arm");
+        armModule.setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.85);
+        Timer.delay(1);
         //shoot
+        System.out.println("Shooting");
         shooterModule.shoot();
-        
+        System.out.println("Done");
     }
 
     public void autonomousPeriodic(){
@@ -254,7 +262,7 @@ public class Anaconda extends IterativeRobot {
             driveModule.reset();
         
         if(rJoy.getTrigger())
-            driveModule.setSetpoint(5);
+            driveModule.setSetpoint(10);
         else
             driveModule.setSetpoint(0);
             
