@@ -57,7 +57,7 @@ public class Anaconda extends IterativeRobot {
     
     
     public void robotInit(){
-        
+//        return;
         System.out.println("robotInit()");
         
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.SOLENOID_PORT);
@@ -254,7 +254,8 @@ public class Anaconda extends IterativeRobot {
 //            armModule.setArmPower(rJoy.getY());
 //        }
         
-        driveModule.setPID(rJoy.getZ()+1, 0, lJoy.getZ()+1);
+        
+        driveModule.setStraightConstant((rJoy.getZ()+1)*2);
         
         driveModule.setGear(false);
         
