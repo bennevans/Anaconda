@@ -2,6 +2,7 @@
 
 package modules;
 
+import com.sun.squawk.util.MathUtils;
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
 /**
@@ -18,10 +19,12 @@ public class DriveModule extends Module{
     private Solenoid gear;
     
     private PIDController lcont, rcont;
-    double setpoint = 0;
+    private double setpoint = 0;
     private double ks = 0, s = 0;
     private double error = 0;
          
+    private AnalogChannel ultrasonic;
+    
     /**
      * constructor
      * @param lv1 left victor 1 port
@@ -46,6 +49,9 @@ public class DriveModule extends Module{
         distancePerPulse = dist;
         gear = new Solenoid(solenoidPort);
         setupEncoders();
+        
+//       ultrasonic = new AnalogChannel(DriveConfig.ULTRASONIC_PORT);
+//       ultrasonic.get
         
         lcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
 
@@ -134,6 +140,17 @@ public class DriveModule extends Module{
      * @param right 
      */
     public synchronized void drive(double left, double right){
+        
+        if(left > 0)
+            left = MathUtils.pow(left, 2);
+        else
+            left = -MathUtils.pow(left, 2);
+        
+        if(right > 0)
+            right = MathUtils.pow(right, 2);
+        else
+            right = -MathUtils.pow(right, 2);
+        
         leftPower = left;
         rightPower = right;
     }

@@ -62,6 +62,19 @@ public class ArmModule extends Module implements PIDOutput {
        this.setPoint = setposition;
     }
     
+    public synchronized void setLowPosition(){
+        //TODO: fix this
+        setPosition(ArmConfig.ARM_MAX);
+    }
+    
+    public synchronized void setHighPosition(){
+        setPosition(ArmConfig.ARM_MIN);
+    }
+    
+    public synchronized void setMedPosition(){
+        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.75);
+    }
+    
     public synchronized void setArmPower(double armPower){
         this.armPower = armPower;
     }
@@ -101,6 +114,11 @@ public class ArmModule extends Module implements PIDOutput {
     public void pidWrite(double d) {
        arm.set(d);
     }
+    
+    public double getPotValue(){
+        return pot.get();
+    }
+    
     /**
      * toString for ArmModule 
      * @return current field values as a string

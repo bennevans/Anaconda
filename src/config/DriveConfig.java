@@ -1,6 +1,5 @@
 package config;
 
-
 /**
  *
  * @author Ben Evans
@@ -16,4 +15,6 @@ public class DriveConfig {
     public static final int RIGHT_ENCODER_A = 2, RIGHT_ENCODER_B = 3;
     public static final double KP = 0.6, KI = 0, KD = 1, KS = 0;
     public static final int SOLENOID_PORT = 1;
+    public static final int ULTRASONIC_PORT = 7;
 }
+ 
