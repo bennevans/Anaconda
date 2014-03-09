@@ -18,13 +18,11 @@ public class DriveModule extends Module{
     private double leftPower = 0, rightPower = 0;
     private Solenoid gear;
     
-    private PIDController lcont, rcont;
+//    private PIDController lcont, rcont, scont;
+    private PIDController driveController;
+    private double s = 1;
     private double setpoint = 0;
-    private double ks = 0, s = 0;
-    private double error = 0;
-         
-    private AnalogChannel ultrasonic;
-    
+             
     /**
      * constructor
      * @param lv1 left victor 1 port
@@ -50,40 +48,67 @@ public class DriveModule extends Module{
         gear = new Solenoid(solenoidPort);
         setupEncoders();
         
+        driveController = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
+
+            public double pidGet() {
+                return (lEncoder.getDistance() + rEncoder.getDistance()) / 2.0;
+            }
+            
+        }, new PIDOutput() {
+
+            public void pidWrite(double d) {
+                if(driveController.isEnable()){
+                    setPower(d, d * s);
+                }
+            }
+        });
+                
 //       ultrasonic = new AnalogChannel(DriveConfig.ULTRASONIC_PORT);
 //       ultrasonic.get
+//        
+//        lcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
+//
+//            public double pidGet() {
+//                return lEncoder.getDistance();
+//            }
+//        }, new PIDOutput() {
+//
+//            public void pidWrite(double d) {
+//                lVictor1.set(d + s);
+//                lVictor2.set(d + s);
+//            }
+//        });
+//        
+//        rcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
+//
+//            public double pidGet() {
+//                return rEncoder.getDistance();
+//            }
+//        }, new PIDOutput() {
+//
+//            public void pidWrite(double d) {
+//                rVictor1.set(-d + s);
+//                rVictor2.set(-d + s);
+//            }
+//        });
+//        
+//        scont = new PIDController(DriveConfig.KSP, DriveConfig.KSI, DriveConfig.KSD, new PIDSource() {
+//
+//            public double pidGet() {
+//                return 
+//            }
+//        }, new PIDOutput() {
+//
+//            public void pidWrite(double d) {
+//                s = d;
+//            }
+//        });
+//        
+//        lcont.setOutputRange(-0.5, 0.5);
+//        rcont.setOutputRange(-0.5, 0.5);
         
-        lcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
-
-            public double pidGet() {
-                return lEncoder.getDistance();
-            }
-        }, new PIDOutput() {
-
-            public void pidWrite(double d) {
-                lVictor1.set(d + s);
-                lVictor2.set(d + s);
-            }
-        });
-        
-        rcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
-
-            public double pidGet() {
-                return rEncoder.getDistance();
-            }
-        }, new PIDOutput() {
-
-            public void pidWrite(double d) {
-                rVictor1.set(-d + s);
-                rVictor2.set(-d + s);
-            }
-        });
-        
-        ks = DriveConfig.KS;
-        
-        lcont.setOutputRange(-0.5, 0.5);
-        rcont.setOutputRange(-0.5, 0.5);
-        
+        driveController.setOutputRange(-0.5, 0.5);
+        s = DriveConfig.KS;
     }
     /**
      * starts encoder and sets distance
@@ -97,8 +122,9 @@ public class DriveModule extends Module{
     }
     
     public synchronized void disablePID(){
-        lcont.disable();
-        rcont.disable();
+//        lcont.disable();
+//        rcont.disable();
+        driveController.disable();
     }
     
     /**
@@ -120,8 +146,9 @@ public class DriveModule extends Module{
      */    
     public void reset(){
         resetEncoders();
-        lcont.reset();
-        rcont.reset();
+//        lcont.reset();
+//        rcont.reset();
+        driveController.reset();
     }
     /**
      * sets victors 
@@ -153,6 +180,10 @@ public class DriveModule extends Module{
         
         leftPower = left;
         rightPower = right;
+    }
+    
+    public synchronized void setS(double s){
+        this.s = s;
     }
     
     public synchronized void setSetpoint(double setpoint){
@@ -197,17 +228,22 @@ public class DriveModule extends Module{
                 
                 if(autoMode){
                     setGear(false);
-                    updateS();
-                    lcont.enable();
-                    rcont.enable();
-                    lcont.setSetpoint(setpoint);
-                    rcont.setSetpoint(setpoint);
+//                    updateS();
+//                    lcont.enable();
+//                    rcont.enable();
+//                    lcont.setSetpoint(setpoint);
+//                    rcont.setSetpoint(setpoint);
+                    driveController.enable();
+                    driveController.setSetpoint(setpoint);
                 }else{
-                    lcont.disable();
-                    rcont.disable();
-                    lcont.setSetpoint(0);
-                    rcont.setSetpoint(0);
+//                    lcont.disable();
+//                    rcont.disable();
+//                    lcont.setSetpoint(0);
+//                    rcont.setSetpoint(0);
+                    driveController.disable();
+                    driveController.reset();
                     setPower(leftPower, rightPower);
+                                        
                 }
                 
             }else{
@@ -218,22 +254,23 @@ public class DriveModule extends Module{
         }
     }
         
-    public synchronized void updateS(){
-        error = lcont.get() - rcont.get();
-        s = error * ks;
-    }
-    
-    public synchronized void setStraightConstant(double ks){
-        this.ks = ks;
-    }
+//    public synchronized void updateS(){
+//        error = lcont.get() - rcont.get();
+//        s = error * ks;
+//    }
+//    
+//    public synchronized void setStraightConstant(double ks){
+//        this.ks = ks;
+//    }
     
     public synchronized void setPID(double p, double i, double d){
-        lcont.setPID(p, i, d);
-        rcont.setPID(p, i, d);
+//        lcont.setPID(p, i, d);
+//        rcont.setPID(p, i, d);
+        driveController.setPID(p, i, d);
     }
     
     public synchronized String toString(){
         return "Left: " + lVictor1.get() + " Right: " + rVictor1.get() + " Auto: " + autoMode + " LTicks: " + lEncoder.get() + " RTicks: " + rEncoder.get() 
-                + " Distance: " + lEncoder.getDistance() + " Setpoint: " + rcont.getSetpoint() + " P: " + lcont.getP() + " I: " + lcont.getI() + " D: " + lcont.getD();
+                + " Distance: " + lEncoder.getDistance() + " Setpoint: " + driveController.getSetpoint() + " S: " + s + " P: " + driveController.getP() + " I: " + driveController.getI() + " D: " + driveController.getD();
     }
 }

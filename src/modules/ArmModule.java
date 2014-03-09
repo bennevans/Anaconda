@@ -75,6 +75,10 @@ public class ArmModule extends Module implements PIDOutput {
         setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.75);
     }
     
+    public synchronized void setLowGoalPosition(){
+        setPosition((ArmConfig.ARM_MIN + ArmConfig.ARM_MAX)/ 3.0);
+    }
+    
     public synchronized void setArmPower(double armPower){
         this.armPower = armPower;
     }

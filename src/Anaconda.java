@@ -88,9 +88,7 @@ public class Anaconda extends IterativeRobot {
         compressorModule.start();
         armModule.start();
         systemTime.start();
-        
-        armModule.setPID(0.7, 0, 3.5);
-        
+                
         Watchdog.getInstance().setEnabled(false);
         Watchdog.getInstance().kill();
         
@@ -102,6 +100,9 @@ public class Anaconda extends IterativeRobot {
         shooterModule.disable();
         compressorModule.disable();
         armModule.disable();
+        armModule.setPID(ArmConfig.p, ArmConfig.i, ArmConfig.d);
+        armModule.setPosition(ArmConfig.ARM_MIN);
+//        driveModule.setStraightConstant(DriveConfig.KS);
     }
 
     public void reset(){
@@ -127,8 +128,8 @@ public class Anaconda extends IterativeRobot {
         
         //Move forward
         System.out.println("Moving");
-        driveModule.setSetpoint(5);
-        Timer.delay(4);
+        driveModule.setSetpoint(10);
+        Timer.delay(1.5);
         System.out.println("Setting arm");
         armModule.setMedPosition();
         Timer.delay(1);
@@ -148,7 +149,7 @@ public class Anaconda extends IterativeRobot {
         driveModule.enable();
         armModule.enable();
         compressorModule.enable();
-        
+        driveModule.disablePID();
         driveModule.setAutoModeOff();
     }
 
@@ -225,7 +226,7 @@ public class Anaconda extends IterativeRobot {
             armModule.setHighPosition();
         
         if(infoCounter % 5 == 0){
-            System.out.println(shooterModule.toString()+"\n"+armModule.toString());
+            System.out.println(driveModule.toString());
         }
         infoCounter++;
                 
@@ -235,15 +236,18 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void testInit(){
-        armModule.disable();
-        driveModule.disable();
-        driveModule.setAutoModeOff();
-        shooterModule.disable();
+        armModule.enable();
+        driveModule.enable();
+        driveModule.setAutoModeOn();
+        shooterModule.enable(); 
         compressorModule.enable();
         armModule.setPosition(ArmConfig.ARM_MIN);
     }
     
     int testCounter = 0;
+    int tshootCounter = 0;
+    boolean tlastShoot = false;
+    double testD = 0;
     
     public void testPeriodic(){
         
@@ -255,14 +259,45 @@ public class Anaconda extends IterativeRobot {
 //            armModule.disable();
 //            armModule.setArmPower(rJoy.getY());
 //        }
-   
-
         
-        if(testCounter % 20 == 0)
-            System.out.println(armModule.getPotValue());
+//        driveModule.setStraightConstant(rJoy.getZ() + 1);
+   
+        if(tlastShoot != xbox.getRB())
+            tshootCounter++;
+        tlastShoot = xbox.getRB();
+        
+        if(tshootCounter % 4 == 0){
+            shooterModule.setManual(true);
+        }else if(tshootCounter % 2 == 0){
+            if(xbox.getLB() && !shooterModule.isShooting()){
+                System.out.println("XBOX SHOOT");
+                shooterModule.setManual(false);
+                shooterModule.shoot();
+            }                    
+            tshootCounter += 2;
+        }
+        
+        //driveModule.setS((rJoy.getZ() + 1)/2.0);
+        
+        if(lJoy.getRawButton(9))
+            testD += 0.01;
+        else if(lJoy.getRawButton(8) && testD > 0.1)
+            testD -= 0.01;
+        
+        armModule.setPID((lJoy.getZ()+1)/2.0, 0, testD);
+        
+        if(rJoy.getTrigger())
+            armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
+        else
+            armModule.setPosition(ArmConfig.ARM_MAX);
+        
+        if(testCounter % 20 == 0){
+            System.out.println(armModule);
+        }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
         testCounter++;
+        
         
         Timer.delay(0.05);
         
