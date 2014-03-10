@@ -16,5 +16,6 @@ public class DriveConfig {
     public static final double KP = 0.6, KI = 0, KD = 1, KS = 0.575;
     public static final int SOLENOID_PORT = 1;
     public static final int ULTRASONIC_PORT = 7;
+    public static final double DRIVE_EXPONENT = 1.64;
 }
  

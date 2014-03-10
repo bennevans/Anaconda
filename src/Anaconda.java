@@ -99,6 +99,7 @@ public class Anaconda extends IterativeRobot {
         Watchdog.getInstance().setEnabled(false);
         Watchdog.getInstance().kill();
         
+        driveModule.setDriveExponent(DriveConfig.DRIVE_EXPONENT);
     }
     
     public void disabledInit(){
@@ -180,7 +181,7 @@ public class Anaconda extends IterativeRobot {
         
         driveModule.setGear(gear);
         
-        driveModule.setDriveExponent((lJoy.getZ() + 1)*2);
+//        driveModule.setDriveExponent((lJoy.getZ() + 1)*2);
         
         
         
