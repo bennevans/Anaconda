@@ -20,6 +20,8 @@ import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
 import com.sun.squawk.microedition.io.FileConnection;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Watchdog;
 import java.io.PrintStream;
 import javax.microedition.io.Connector;
@@ -38,6 +40,7 @@ public class Anaconda extends IterativeRobot {
     CompressorModule compressorModule;
     ArmModule armModule;
     
+    DriverStationLCD driverStation;
     
     //Driver controllers
     Joystick lJoy, rJoy;
@@ -57,7 +60,11 @@ public class Anaconda extends IterativeRobot {
     
     
     public void robotInit(){
-//        return;
+                
+        driverStation = DriverStationLCD.getInstance();
+        driverStation.println(DriverStationLCD.Line.kUser1, 1, "Starting up robot!");
+        driverStation.updateLCD();
+        
         System.out.println("robotInit()");
         
         driveModule = new DriveModule(DriveConfig.LEFT_VICTOR_ONE, DriveConfig.LEFT_VICTOR_TWO, DriveConfig.RIGHT_VICTOR_ONE, DriveConfig.RIGHT_VICTOR_TWO, DriveConfig.LEFT_ENCODER_A, DriveConfig.LEFT_ENCODER_B, DriveConfig.RIGHT_ENCODER_A, DriveConfig.RIGHT_ENCODER_B, DriveConfig.DISTANCE_PER_TICK, DriveConfig.SOLENOID_PORT);
@@ -126,13 +133,14 @@ public class Anaconda extends IterativeRobot {
         driveModule.setGear(false);
         driveModule.setAutoModeOn();
         
-        //Move forward
-        System.out.println("Moving");
-        driveModule.setSetpoint(10);
-        Timer.delay(1.5);
         System.out.println("Setting arm");
         armModule.setMedPosition();
         Timer.delay(1);
+        //Move forward
+        System.out.println("Moving");
+        driveModule.setSetpoint(10);
+        Timer.delay(4);
+
         //shoot
         System.out.println("Shooting");
         shooterModule.shoot();
@@ -171,6 +179,8 @@ public class Anaconda extends IterativeRobot {
             gear = false;
         
         driveModule.setGear(gear);
+        
+        driveModule.setDriveExponent((lJoy.getZ() + 1)*2);
         
         
         
@@ -226,7 +236,11 @@ public class Anaconda extends IterativeRobot {
             armModule.setHighPosition();
         
         if(infoCounter % 5 == 0){
+            System.out.println(armModule.toString());
             System.out.println(driveModule.toString());
+            driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
+            
+            driverStation.updateLCD();
         }
         infoCounter++;
                 
@@ -293,6 +307,9 @@ public class Anaconda extends IterativeRobot {
         
         if(testCounter % 20 == 0){
             System.out.println(armModule);
+            
+            DriverStationLCD.getInstance();
+            
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         

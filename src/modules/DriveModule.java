@@ -23,6 +23,8 @@ public class DriveModule extends Module{
     private double s = 1;
     private double setpoint = 0;
              
+    private double pow = 2;
+    
     /**
      * constructor
      * @param lv1 left victor 1 port
@@ -149,6 +151,7 @@ public class DriveModule extends Module{
 //        lcont.reset();
 //        rcont.reset();
         driveController.reset();
+        setpoint = 0;
     }
     /**
      * sets victors 
@@ -169,14 +172,14 @@ public class DriveModule extends Module{
     public synchronized void drive(double left, double right){
         
         if(left > 0)
-            left = MathUtils.pow(left, 2);
+            left = MathUtils.pow(left, pow);
         else
-            left = -MathUtils.pow(left, 2);
+            left = -MathUtils.pow(-left, pow);
         
         if(right > 0)
-            right = MathUtils.pow(right, 2);
+            right = MathUtils.pow(right, pow);
         else
-            right = -MathUtils.pow(right, 2);
+            right = -MathUtils.pow(-right, pow);
         
         leftPower = left;
         rightPower = right;
@@ -269,8 +272,16 @@ public class DriveModule extends Module{
         driveController.setPID(p, i, d);
     }
     
+    public synchronized void setDriveExponent(double exp){
+        pow = exp;
+    }
+    
+    public synchronized double getDriveExponent(){
+        return pow;
+    }
+    
     public synchronized String toString(){
-        return "Left: " + lVictor1.get() + " Right: " + rVictor1.get() + " Auto: " + autoMode + " LTicks: " + lEncoder.get() + " RTicks: " + rEncoder.get() 
+        return "Left: " + lVictor1.get() + " Right: " + rVictor1.get() + " Pow: " + pow + " Auto: " + autoMode + " LTicks: " + lEncoder.get() + " RTicks: " + rEncoder.get() 
                 + " Distance: " + lEncoder.getDistance() + " Setpoint: " + driveController.getSetpoint() + " S: " + s + " P: " + driveController.getP() + " I: " + driveController.getI() + " D: " + driveController.getD();
     }
 }

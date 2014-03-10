@@ -64,7 +64,7 @@ public class ArmModule extends Module implements PIDOutput {
     
     public synchronized void setLowPosition(){
         //TODO: fix this
-        setPosition(ArmConfig.ARM_MAX);
+        setPosition(ArmConfig.ARM_MAX - 0.1);
     }
     
     public synchronized void setHighPosition(){
@@ -72,7 +72,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.75);
+        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.65);
     }
     
     public synchronized void setLowGoalPosition(){
