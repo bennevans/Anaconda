@@ -35,12 +35,14 @@ public class ArmModule extends Module implements PIDOutput {
        roller = new Victor(rollerPort);
        arm = new Victor(armPort);
        
+       
        controller.setInputRange(ArmConfig.ARM_MIN, ArmConfig.ARM_MAX);
+       
     }
 
     public synchronized void setRoller(double value){
         roller.set(value);
-    }
+    }   
     
     /**
      * sets p,i,d constants
@@ -71,7 +73,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) / 2.65);
+        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * 0.3 );
     }
     
     public synchronized void setLowGoalPosition(){
@@ -115,7 +117,10 @@ public class ArmModule extends Module implements PIDOutput {
      * @param d pid output value
      */
     public void pidWrite(double d) {
-       arm.set(d);
+       if(ArmConfig.MOTOR_REVERSED)
+           arm.set(-d);
+       else
+          arm.set(d);
     }
     
     public double getPotValue(){

@@ -20,7 +20,6 @@ import modules.DriveModule;
 import modules.ArmModule;
 import modules.ShooterModule;
 import com.sun.squawk.microedition.io.FileConnection;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.Watchdog;
 import java.io.PrintStream;
@@ -276,35 +275,45 @@ public class Anaconda extends IterativeRobot {
 //        }
         
 //        driveModule.setStraightConstant(rJoy.getZ() + 1);
-   
-        if(tlastShoot != xbox.getRB())
-            tshootCounter++;
-        tlastShoot = xbox.getRB();
-        
-        if(tshootCounter % 4 == 0){
-            shooterModule.setManual(true);
-        }else if(tshootCounter % 2 == 0){
-            if(xbox.getLB() && !shooterModule.isShooting()){
-                System.out.println("XBOX SHOOT");
-                shooterModule.setManual(false);
-                shooterModule.shoot();
-            }                    
-            tshootCounter += 2;
+        if(true){
+            if(tlastShoot != xbox.getRB())
+                tshootCounter++;
+            tlastShoot = xbox.getRB();
+
+            if(tshootCounter % 4 == 0){
+                shooterModule.setManual(true);
+            }else if(tshootCounter % 2 == 0){
+                if(xbox.getLB() && !shooterModule.isShooting()){
+                    System.out.println("XBOX SHOOT");
+                    shooterModule.setManual(false);
+                    shooterModule.shoot();
+                }                    
+                tshootCounter += 2;
+            }
+
+            //driveModule.setS((rJoy.getZ() + 1)/2.0);
+
+            if(lJoy.getRawButton(9))
+                testD += 0.01;
+            else if(lJoy.getRawButton(8) && testD > 0.1)
+                testD -= 0.01;
+
+            armModule.setPID((lJoy.getZ()+1), 0, testD);
+
+            if(rJoy.getTrigger())
+                armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
+            else
+                armModule.setPosition(ArmConfig.ARM_MAX);
+        }else if(false){
+            driveModule.setS((rJoy.getZ() + 1) /2.0);
+            if(rJoy.getTrigger()){
+                driveModule.setSetpoint(5);
+            }else{
+                driveModule.setSetpoint(0);
+            }
+        }else{
+            armModule.setArmPower(rJoy.getZ()/2.0);
         }
-        
-        //driveModule.setS((rJoy.getZ() + 1)/2.0);
-        
-        if(lJoy.getRawButton(9))
-            testD += 0.01;
-        else if(lJoy.getRawButton(8) && testD > 0.1)
-            testD -= 0.01;
-        
-        armModule.setPID((lJoy.getZ()+1), 0, testD);
-        
-        if(rJoy.getTrigger())
-            armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
-        else
-            armModule.setPosition(ArmConfig.ARM_MAX);
         
         if(testCounter % 20 == 0){
             System.out.println(armModule);            
