@@ -238,7 +238,7 @@ public class Anaconda extends IterativeRobot {
         
         if(infoCounter % 5 == 0){
             System.out.println(armModule.toString());
-            System.out.println(driveModule.toString());
+            driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
             
             driverStation.updateLCD();
@@ -299,7 +299,7 @@ public class Anaconda extends IterativeRobot {
         else if(lJoy.getRawButton(8) && testD > 0.1)
             testD -= 0.01;
         
-        armModule.setPID((lJoy.getZ()+1)/2.0, 0, testD);
+        armModule.setPID((lJoy.getZ()+1), 0, testD);
         
         if(rJoy.getTrigger())
             armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
@@ -307,10 +307,7 @@ public class Anaconda extends IterativeRobot {
             armModule.setPosition(ArmConfig.ARM_MAX);
         
         if(testCounter % 20 == 0){
-            System.out.println(armModule);
-            
-            DriverStationLCD.getInstance();
-            
+            System.out.println(armModule);            
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
