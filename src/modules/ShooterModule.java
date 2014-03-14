@@ -78,6 +78,8 @@ public class ShooterModule extends Module{
         
         while(true){
             
+            
+            
             if(winchPower > 0 && isButtonPressed()){
                 winchPower = 0;
             }

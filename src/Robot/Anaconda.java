@@ -35,6 +35,8 @@ import modules.CompressorModule;
  * @author Ankith Uppundda
  */
 public class Anaconda extends IterativeRobot {
+    
+    static Anaconda instance;
 
     //Modules
     DriveModule driveModule;
@@ -102,6 +104,8 @@ public class Anaconda extends IterativeRobot {
         Watchdog.getInstance().kill();
         
         driveModule.setDriveExponent(DriveConfig.DRIVE_EXPONENT);
+        
+        instance = this;
     }
     
     public void disabledInit(){
@@ -136,6 +140,7 @@ public class Anaconda extends IterativeRobot {
         driveModule.enable();
         driveModule.setGear(false);
         driveModule.setAutoModeOn();
+        driveModule.reset();
         
         driveModule.setS(.95);
         
@@ -360,7 +365,7 @@ public class Anaconda extends IterativeRobot {
     }
     
     public static Anaconda getInstance(){
-        return this;
+        return instance;
     }
     
 }
