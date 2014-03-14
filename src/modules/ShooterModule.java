@@ -97,7 +97,7 @@ public class ShooterModule extends Module{
                     Timer.delay(0.25);
 
                     shifter.set(true);
-                    Timer.delay(1);
+                    Timer.delay(2);
 
                     shifter.set(false);
 //                    Timer.delay(1);

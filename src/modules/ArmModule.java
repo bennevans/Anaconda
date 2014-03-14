@@ -21,6 +21,7 @@ public class ArmModule extends Module implements PIDOutput {
     private Victor roller, arm;
     
     private double armPower = 0, setPoint;
+    private double KM = ArmConfig.ARM_MED_CONST;
     
     /**
      *  Constructor for ArmModule
@@ -73,7 +74,7 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * 0.3 );
+        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * KM );
     }
     
     public synchronized void setLowGoalPosition(){
@@ -123,8 +124,16 @@ public class ArmModule extends Module implements PIDOutput {
           arm.set(d);
     }
     
-    public double getPotValue(){
+    public synchronized double getPotValue(){
         return pot.get();
+    }
+    
+    public synchronized void setMedConstant(double k){
+        this.KM = k;
+    }
+    
+    public synchronized double getMedConstant(){
+        return KM;
     }
     
     /**
@@ -132,7 +141,7 @@ public class ArmModule extends Module implements PIDOutput {
      * @return current field values as a string
      */
     public String toString(){
-        return "P: " + controller.getP() + " D: " + controller.getD() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
+        return "P: " + controller.getP() + " D: " + controller.getD() + " M: " + getMedConstant() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
     }
 
     /**

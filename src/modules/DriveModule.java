@@ -2,6 +2,7 @@
 
 package modules;
 
+import Robot.Anaconda;
 import com.sun.squawk.util.MathUtils;
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
@@ -24,6 +25,8 @@ public class DriveModule extends Module{
     private double setpoint = 0;
              
     private double pow = 2;
+    
+    private int counter = 0;
     
     /**
      * constructor
@@ -227,6 +230,12 @@ public class DriveModule extends Module{
      */    
     public void run(){
         while(true){
+            
+            if(counter % 20 == 1 && Robot.Anaconda.getInstance().isAutonomous()){
+                System.out.println("*****DRIVE*****\n"+toString()+"\n***************");           
+            }
+            counter++;
+            
             if(enabled){
                 
                 if(autoMode){

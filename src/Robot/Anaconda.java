@@ -1,3 +1,5 @@
+package Robot;
+
 /*----------------------------------------------------------------------------*/
 /* Copyright (c) FIRST 2008. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
@@ -8,6 +10,7 @@
 
 
 
+import util.XBox;
 import config.ArmConfig;
 import config.CompressorConfig;
 import config.DriveConfig;
@@ -109,6 +112,7 @@ public class Anaconda extends IterativeRobot {
         armModule.disable();
         armModule.setPID(ArmConfig.p, ArmConfig.i, ArmConfig.d);
         armModule.setPosition(ArmConfig.ARM_MIN);
+        armModule.setMedConstant(ArmConfig.ARM_MED_CONST);
 //        driveModule.setStraightConstant(DriveConfig.KS);
     }
 
@@ -133,13 +137,15 @@ public class Anaconda extends IterativeRobot {
         driveModule.setGear(false);
         driveModule.setAutoModeOn();
         
+        driveModule.setS(.95);
+        
         System.out.println("Setting arm");
         armModule.setMedPosition();
         Timer.delay(1);
         //Move forward
         System.out.println("Moving");
-        driveModule.setSetpoint(10);
-        Timer.delay(4);
+        driveModule.setSetpoint(7);
+        Timer.delay(3);
 
         //shoot
         System.out.println("Shooting");
@@ -275,7 +281,7 @@ public class Anaconda extends IterativeRobot {
 //        }
         
 //        driveModule.setStraightConstant(rJoy.getZ() + 1);
-        if(true){
+        if(false){
             if(tlastShoot != xbox.getRB())
                 tshootCounter++;
             tlastShoot = xbox.getRB();
@@ -304,19 +310,24 @@ public class Anaconda extends IterativeRobot {
                 armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
             else
                 armModule.setPosition(ArmConfig.ARM_MAX);
-        }else if(false){
+        }else if(true){
             driveModule.setS((rJoy.getZ() + 1) /2.0);
             if(rJoy.getTrigger()){
-                driveModule.setSetpoint(5);
+                driveModule.setSetpoint(10);
             }else{
                 driveModule.setSetpoint(0);
             }
+        }else if(false){
+            armModule.setMedConstant((lJoy.getZ() + 1) / 2.0);
+            armModule.setMedPosition();
         }else{
             armModule.setArmPower(rJoy.getZ()/2.0);
         }
         
         if(testCounter % 20 == 0){
-            System.out.println(armModule);            
+//            System.out.println(armModule);        
+            System.out.println(driveModule);
+            
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
@@ -346,6 +357,10 @@ public class Anaconda extends IterativeRobot {
         logps.println("\t</module>");
         logps.println("</block>");
         
+    }
+    
+    public static Anaconda getInstance(){
+        return this;
     }
     
 }
