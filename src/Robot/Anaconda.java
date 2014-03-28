@@ -128,7 +128,8 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void disabledPeriodic(){
-        Timer.delay(0.5);
+        driveModule.reset();
+        Timer.delay(0.1);
     }
 
     public void autonomousInit(){
@@ -149,8 +150,8 @@ public class Anaconda extends IterativeRobot {
         Timer.delay(1);
         //Move forward
         System.out.println("Moving");
-        driveModule.setSetpoint(7);
-        Timer.delay(3);
+        driveModule.setSetpoint(11.5);
+        Timer.delay(5);
 
         //shoot
         System.out.println("Shooting");
@@ -246,6 +247,9 @@ public class Anaconda extends IterativeRobot {
         if(xbox.getYb())
             armModule.setHighPosition();
         
+        if(xbox.getXb())
+            armModule.setTrussPostition();
+        
         if(infoCounter % 5 == 0){
             System.out.println(armModule.toString());
             driverStation.clear();
@@ -315,7 +319,7 @@ public class Anaconda extends IterativeRobot {
                 armModule.setPosition((ArmConfig.ARM_MAX - ArmConfig.ARM_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_MIN);
             else
                 armModule.setPosition(ArmConfig.ARM_MAX);
-        }else if(true){
+        }else if(false){
             driveModule.setS((rJoy.getZ() + 1) /2.0);
             if(rJoy.getTrigger()){
                 driveModule.setSetpoint(10);
@@ -325,13 +329,33 @@ public class Anaconda extends IterativeRobot {
         }else if(false){
             armModule.setMedConstant((lJoy.getZ() + 1) / 2.0);
             armModule.setMedPosition();
+        }else if(true){
+            armModule.setTrussPostition();
+            armModule.setTrussConstant((rJoy.getZ() + 1) / 2);
+            
+            if(tlastShoot != xbox.getRB())
+                tshootCounter++;
+            tlastShoot = xbox.getRB();
+
+            if(tshootCounter % 4 == 0){
+                shooterModule.setManual(true);
+            }else if(tshootCounter % 2 == 0){
+                if(xbox.getLB() && !shooterModule.isShooting()){
+                    System.out.println("XBOX SHOOT");
+                    shooterModule.setManual(false);
+                    shooterModule.shoot();
+                }                    
+                tshootCounter += 2;
+            }
+
+            
         }else{
             armModule.setArmPower(rJoy.getZ()/2.0);
         }
         
         if(testCounter % 20 == 0){
 //            System.out.println(armModule);        
-            System.out.println(driveModule);
+            System.out.println(armModule.getTrussConstant());
             
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);

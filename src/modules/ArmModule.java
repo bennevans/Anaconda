@@ -21,7 +21,7 @@ public class ArmModule extends Module implements PIDOutput {
     private Victor roller, arm;
     
     private double armPower = 0, setPoint;
-    private double KM = ArmConfig.ARM_MED_CONST;
+    private double KM = ArmConfig.ARM_MED_CONST, KT = ArmConfig.ARM_TRUSS_CONST;
     
     /**
      *  Constructor for ArmModule
@@ -75,6 +75,10 @@ public class ArmModule extends Module implements PIDOutput {
     
     public synchronized void setMedPosition(){
         setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * KM );
+    }
+    
+    public synchronized void setTrussPostition(){
+        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * KT);
     }
     
     public synchronized void setLowGoalPosition(){
@@ -134,6 +138,14 @@ public class ArmModule extends Module implements PIDOutput {
     
     public synchronized double getMedConstant(){
         return KM;
+    }
+    
+    public synchronized void setTrussConstant(double t){
+        this.KT = t;
+    }
+    
+    public synchronized double getTrussConstant(){
+        return KT;
     }
     
     /**
