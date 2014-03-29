@@ -38,7 +38,7 @@ public class ArmModule extends Module implements PIDOutput {
        
        
        controller.setInputRange(ArmConfig.ARM_INPUT_MIN, ArmConfig.ARM_INPUT_MAX);
-       controller.setOutputRange(ArmConfig.ARM_OUTPUT_MIN, ArmConfig.ARM_OUTPUTMAX);
+       controller.setOutputRange(ArmConfig.ARM_OUTPUT_MIN, ArmConfig.ARM_OUTPUT_MAX);
     }
 
     public synchronized void setRoller(double value){
@@ -66,23 +66,23 @@ public class ArmModule extends Module implements PIDOutput {
     
     public synchronized void setLowPosition(){
         //TODO: fix this
-        setPosition(ArmConfig.ARM_MAX);
+        setPosition(ArmConfig.ARM_INPUT_MAX);
     }
     
     public synchronized void setHighPosition(){
-        setPosition(ArmConfig.ARM_MIN);
+        setPosition(ArmConfig.ARM_INPUT_MIN);
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * KM );
+        setPosition((ArmConfig.ARM_INPUT_MAX + ArmConfig.ARM_INPUT_MIN) * KM );
     }
     
     public synchronized void setTrussPostition(){
-        setPosition((ArmConfig.ARM_MAX + ArmConfig.ARM_MIN) * KT);
+        setPosition((ArmConfig.ARM_INPUT_MAX + ArmConfig.ARM_INPUT_MIN) * KT);
     }
     
     public synchronized void setLowGoalPosition(){
-        setPosition((ArmConfig.ARM_MIN + ArmConfig.ARM_MAX)/ 3.0);
+        setPosition((ArmConfig.ARM_INPUT_MIN + ArmConfig.ARM_INPUT_MAX)/ 3.0);
     }
     
     public synchronized void setArmPower(double armPower){
