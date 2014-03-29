@@ -198,6 +198,8 @@ public class Anaconda extends IterativeRobot {
         
         driveModule.drive(-lJoy.getY(), -rJoy.getY());
         
+        driveModule.setDriveExponent(rJoy.getZ()+1);
+        
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getStart());
                 
@@ -255,7 +257,7 @@ public class Anaconda extends IterativeRobot {
             System.out.println(compressorModule);
             driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
-            driverStation.println(DriverStationLCD.Line.kUser2, 1, "Pressure Swtich: " + compressorModule.toString());
+            driverStation.println(DriverStationLCD.Line.kUser2, 1, "Comp: " + !compressorModule.isPressureSwitchPressed());
             driverStation.updateLCD();
         }
         infoCounter++;

@@ -29,6 +29,11 @@ public class CompressorModule extends Module {
     public void run(){
         compressor.start();
     }
+    
+    public boolean isPressureSwitchPressed(){
+        return compressor.getPressureSwitchValue();
+    }
+    
     /**
      * @return compressor state as string
      */    
