@@ -15,7 +15,8 @@ public class ArmConfig {
    
    public static final boolean MOTOR_REVERSED = true;
    
-   public static final double ARM_MIN = /*0.8 1.69*/0, ARM_MAX = /*4.04 4.91*/ 3.25;
+   public static final double ARM_INPUT_MIN = /*0.8 1.69*/0, ARM_INPUT_MAX = /*4.04 4.91*/ 3.25;
+   public static final double ARM_OUTPUT_MIN = -0.25, ARM_OUTPUT_MAX = 0.25;
    
    public static final double ARM_MED_CONST = 0.25;
    public static final double ARM_TRUSS_CONST = ARM_MED_CONST / 2.0;
