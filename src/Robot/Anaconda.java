@@ -252,9 +252,10 @@ public class Anaconda extends IterativeRobot {
         
         if(infoCounter % 5 == 0){
             System.out.println(armModule.toString());
+            System.out.println(compressorModule);
             driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
-            
+            driverStation.println(DriverStationLCD.Line.kUser2, 1, "Pressure Swtich: " + compressorModule.toString());
             driverStation.updateLCD();
         }
         infoCounter++;
@@ -359,6 +360,7 @@ public class Anaconda extends IterativeRobot {
 //            System.out.println(armModule);        
             System.out.println("potenuse: " + armModule.getPotValue() + " joystick: " + rJoy.getZ());
             System.out.println(armModule);
+            System.out.println(shooterModule);
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
