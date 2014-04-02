@@ -133,6 +133,7 @@ public class Anaconda extends IterativeRobot {
     }
 
     public void autonomousInit(){
+
         System.out.println("autonomousInit()");
         compressorModule.enable();
         armModule.enable();
@@ -142,20 +143,32 @@ public class Anaconda extends IterativeRobot {
         driveModule.setGear(false);
         driveModule.setAutoModeOn();
         driveModule.reset();
-        
+
         driveModule.setS(.95);
         
-        System.out.println("Setting arm");
-        armModule.setMedPosition();
-        Timer.delay(1);
-        //Move forward
-        System.out.println("Moving");
-        driveModule.setSetpoint(11.5);
-        Timer.delay(5);
+        
+        if(true){
 
-        //shoot
-        System.out.println("Shooting");
-        shooterModule.shoot();
+            System.out.println("Setting arm");
+            armModule.setMedPosition();
+            Timer.delay(1);
+            //Move forward
+            System.out.println("Moving");
+            driveModule.setSetpoint(11.5);
+            Timer.delay(5);
+
+            //shoot
+            System.out.println("Shooting");
+            shooterModule.shoot();
+        }else{
+            armModule.setHighPosition();
+            driveModule.setSetpoint(12);
+            Timer.delay(5);
+            driveModule.setAutoModeOff();
+            driveModule.drive(0.2, 0.2);
+            Timer.delay(3);
+            armModule.setRoller(1);
+        }
     }
 
     public void autonomousPeriodic(){
