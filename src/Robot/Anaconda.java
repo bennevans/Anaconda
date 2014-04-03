@@ -210,9 +210,7 @@ public class Anaconda extends IterativeRobot {
         
         
         driveModule.drive(-lJoy.getY(), -rJoy.getY());
-        
-        driveModule.setDriveExponent(rJoy.getZ()+1);
-        
+                
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getStart());
                 
@@ -231,16 +229,27 @@ public class Anaconda extends IterativeRobot {
 //            dshootCounter++;
 //        dlastShoot = rJoy.getTrigger();
         
-        if(shootCounter % 4 == 0){
-            shooterModule.setManual(true);
-        }else if(shootCounter % 2 == 0){
-            if(xbox.getLB() && !shooterModule.isShooting()){
-                System.out.println("XBOX SHOOT");
+//        if(shootCounter % 4 == 0){
+//            shooterModule.setManual(true);
+//        }else if(shootCounter % 2 == 0){
+//            if(xbox.getLB() && !shooterModule.isShooting()){
+//                System.out.println("XBOX SHOOT");
+//                shooterModule.setManual(false);
+//                shooterModule.shoot();
+//            }                    
+//            shootCounter += 2;
+//        }
+        
+        if(xbox.getLB()){
+            if(xbox.getRB()){
                 shooterModule.setManual(false);
                 shooterModule.shoot();
-            }                    
-            shootCounter += 2;
+            }else if(xbox.getBack()){
+                shooterModule.setManual(false);
+                shooterModule.tobyShoot();
+            }
         }
+        
 //        
 //        if(dshootCounter % 4 == 0){
 //            shooterModule.setManual(true);
@@ -266,8 +275,7 @@ public class Anaconda extends IterativeRobot {
             armModule.setTrussPostition();
         
         if(infoCounter % 5 == 0){
-            System.out.println(armModule.toString());
-            System.out.println(compressorModule);
+            System.out.println("LB: " + xbox.getLB() + " RB: " + xbox.getRB());
             driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
             driverStation.println(DriverStationLCD.Line.kUser2, 1, "Comp: " + !compressorModule.isPressureSwitchPressed());
@@ -353,17 +361,22 @@ public class Anaconda extends IterativeRobot {
                 tshootCounter++;
             tlastShoot = xbox.getRB();
 
-            if(tshootCounter % 4 == 0){
-                shooterModule.setManual(true);
-            }else if(tshootCounter % 2 == 0){
-                if(xbox.getLB() && !shooterModule.isShooting()){
-                    System.out.println("XBOX SHOOT");
-                    shooterModule.setManual(false);
-                    shooterModule.shoot();
-                }                    
-                tshootCounter += 2;
-            }
+//            if(tshootCounter % 4 == 0){
+//                shooterModule.setManual(true);
+//            }else if(tshootCounter % 2 == 0){
+//                if(xbox.getLB() && !shooterModule.isShooting()){
+//                    System.out.println("XBOX SHOOT");
+//                    shooterModule.setManual(false);
+//                    shooterModule.shoot();
+//                }                    
+//                tshootCounter += 2;
+//            }
 
+            if(xbox.getLB() && xbox.getRB()){
+                shooterModule.setManual(false);
+                shooterModule.shoot();
+                shooterModule.setManual(true);
+            }
             
         }else if(false){
             armModule.setArmPower(rJoy.getZ()/2.0);

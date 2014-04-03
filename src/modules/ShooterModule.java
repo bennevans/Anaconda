@@ -22,7 +22,7 @@ public class ShooterModule extends Module{
     private boolean manual = true;
     private double winchPower = 0;
     private boolean shifterGear = true, lifterState = false;
-    boolean shoot = false;
+    boolean shoot = false, tobyShoot = false;
     
     
 /**
@@ -46,7 +46,57 @@ public class ShooterModule extends Module{
     public synchronized void shoot(){
         shoot = true;
     }  
+    
+    public synchronized void tobyShoot(){
+        tobyShoot = true;
+    }
+    
+    private void bShoot(){
 
+        lifter.set(true);
+        Timer.delay(0.25);
+
+        shifter.set(true);
+        Timer.delay(2);
+
+        shifter.set(false);
+//                    Timer.delay(1);
+
+        lifter.set(false);
+
+        while(!isButtonPressed()){
+            winch1.set(ShooterConfig.WINCH_POWER);
+            winch2.set(ShooterConfig.WINCH_POWER);
+        }    
+
+        winch1.set(0);
+        winch2.set(0);
+
+        shoot = false;
+
+        setManual(true);
+    }
+    
+    private void tShoot(){
+
+        shifter.set(true);
+        Timer.delay(2);
+
+        shifter.set(false);
+
+        while(!isButtonPressed()){
+            winch1.set(ShooterConfig.WINCH_POWER);
+            winch2.set(ShooterConfig.WINCH_POWER);
+        }    
+
+        winch1.set(0);
+        winch2.set(0);
+
+        tobyShoot = false;
+
+        setManual(true);
+    }
+    
     public synchronized void setIntake(boolean up){
         lifterState = up;
     }
@@ -92,31 +142,9 @@ public class ShooterModule extends Module{
                     winch1.set(winchPower);
                     winch2.set(winchPower);
                 }else if(shoot){
-                    
-                    System.out.println("*****************SHOOTING*****************");
-                    
-                    lifter.set(true);
-                    Timer.delay(0.25);
-
-                    shifter.set(true);
-                    Timer.delay(2);
-
-                    shifter.set(false);
-//                    Timer.delay(1);
-
-                    lifter.set(false);
-                    
-                    while(!isButtonPressed()){
-                        winch1.set(ShooterConfig.WINCH_POWER);
-                        winch2.set(ShooterConfig.WINCH_POWER);
-                    }    
-
-                    winch1.set(0);
-                    winch2.set(0);
-                    
-                    shoot = false;
-                    
-                    System.out.println("*****************DONE SHOOTING*****************");
+                    bShoot();
+                }else if(tobyShoot){
+                    tShoot();
                 }
             }
             
