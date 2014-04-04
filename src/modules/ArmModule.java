@@ -153,7 +153,7 @@ public class ArmModule extends Module implements PIDOutput {
      * @return current field values as a string
      */
     public String toString(){
-        return "P: " + controller.getP() + " D: " + controller.getD() + " M: " + getMedConstant() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
+        return "P: " + controller.getP() + " I: " + controller.getI() + " D: " + controller.getD() + " M: " + getMedConstant() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
     }
 
     /**

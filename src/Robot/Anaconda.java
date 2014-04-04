@@ -275,10 +275,11 @@ public class Anaconda extends IterativeRobot {
             armModule.setTrussPostition();
         
         if(infoCounter % 5 == 0){
-            System.out.println("LB: " + xbox.getLB() + " RB: " + xbox.getRB());
+            System.out.println(armModule);
             driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
             driverStation.println(DriverStationLCD.Line.kUser2, 1, "Comp: " + !compressorModule.isPressureSwitchPressed());
+            driverStation.println(DriverStationLCD.Line.kUser3, 1, "Winched: " + shooterModule.isButtonPressed());
             driverStation.updateLCD();
         }
         infoCounter++;
@@ -290,9 +291,9 @@ public class Anaconda extends IterativeRobot {
     
     public void testInit(){
         armModule.enable();
-        driveModule.enable();
+        driveModule.disable();
         driveModule.setAutoModeOn();
-        shooterModule.enable(); 
+        shooterModule.disable(); 
         compressorModule.enable();
         armModule.setPosition(ArmConfig.ARM_INPUT_MIN);
     }
@@ -300,7 +301,7 @@ public class Anaconda extends IterativeRobot {
     int testCounter = 0;
     int tshootCounter = 0;
     boolean tlastShoot = false;
-    double testD = 0;
+    double testD = 0, testI = 0;
     
     public void testPeriodic(){
         
@@ -315,29 +316,32 @@ public class Anaconda extends IterativeRobot {
         
 //        driveModule.setStraightConstant(rJoy.getZ() + 1);
         if(true){
-            if(tlastShoot != xbox.getRB())
-                tshootCounter++;
-            tlastShoot = xbox.getRB();
 
-            if(tshootCounter % 4 == 0){
-                shooterModule.setManual(true);
-            }else if(tshootCounter % 2 == 0){
-                if(xbox.getLB() && !shooterModule.isShooting()){
-                    System.out.println("XBOX SHOOT");
-                    shooterModule.setManual(false);
-                    shooterModule.shoot();
-                }                    
-                tshootCounter += 2;
+
+            if(xbox.getLB() && xbox.getRB()){
+                shooterModule.setManual(false);
+                shooterModule.shoot();
             }
-
-            //driveModule.setS((rJoy.getZ() + 1)/2.0);
+            
 
             if(lJoy.getRawButton(9))
                 testD += 0.01;
-            else if(lJoy.getRawButton(8) && testD > 0.1)
+            else if(lJoy.getRawButton(8)){
                 testD -= 0.01;
+                if(testD < 0)
+                    testD = 0;
+            }
 
-            armModule.setPID((lJoy.getZ()+1), 0, testD);
+            if(lJoy.getRawButton(11))
+                testI += 0.001;
+            else if(lJoy.getRawButton(10)){
+                testI -= 0.001;
+                if(testI < 0)
+                    testI = 0;
+            }
+            
+            
+            armModule.setPID((lJoy.getZ()+1), testI, testD);
 
             if(rJoy.getTrigger())
                 armModule.setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_INPUT_MIN);
@@ -386,9 +390,7 @@ public class Anaconda extends IterativeRobot {
         
         if(testCounter % 20 == 0){
 //            System.out.println(armModule);        
-            System.out.println("potenuse: " + armModule.getPotValue() + " joystick: " + rJoy.getZ());
             System.out.println(armModule);
-            System.out.println(shooterModule);
         }
 //        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
