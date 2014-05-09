@@ -1,16 +1,18 @@
-
 package modules;
 
 import Robot.Anaconda;
 import com.sun.squawk.util.MathUtils;
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
-import edu.wpi.first.wpilibj.Joystick;
 /**
  *
  * @author Ben Evans
  * @author Ankith Uppunda
  */
+ 
+ 
+ 
+ 
 public class DriveModule extends Module{
     private Joystick ljoy;
     private Victor lVictor1, lVictor2, rVictor1, rVictor2;
@@ -46,7 +48,6 @@ public class DriveModule extends Module{
         lVictor2 = new Victor(lv2);
         rVictor1 = new Victor(rv1);
         rVictor2 = new Victor(rv2);
-        ljoy = new Joystick(1);
         
         lEncoder = new Encoder(lenca, lencb);
         rEncoder = new Encoder(renca, rencb);
@@ -162,18 +163,18 @@ public class DriveModule extends Module{
      * @param left
      * @param right 
      */    
-    private synchronized void setPower(double left, double right){
-        lVictor1.set(left*ljoy.getZ());
-        lVictor2.set(left*ljoy.getZ());
-        rVictor1.set(-right*ljoy.getZ());
-        rVictor2.set(-right*ljoy.getZ());
+    private synchronized void setPower(double left, double right, double speedMod){
+        lVictor1.set(left*speedMod);
+        lVictor2.set(left*speedMod);
+        rVictor1.set(-right*speedMod);
+        rVictor2.set(-right*speedMod);
     }
     /**
      * sets leftPower to left and rightPower to right
      * @param left
      * @param right 
      */
-    public synchronized void drive(double left, double right){
+    public synchronized void drive(double left, double right, double speedMod){
         
         if(left > 0)
             left = MathUtils.pow(left, pow);
