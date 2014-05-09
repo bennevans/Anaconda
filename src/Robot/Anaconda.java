@@ -209,7 +209,7 @@ public class Anaconda extends IterativeRobot {
         
         
         
-        driveModule.drive(-lJoy.getY(), -rJoy.getY());
+        driveModule.drive(-lJoy.getY(), -rJoy.getY(), lJoy.getZ());
                 
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getStart());
