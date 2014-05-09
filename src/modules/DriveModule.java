@@ -162,10 +162,10 @@ public class DriveModule extends Module{
      * @param right 
      */    
     private synchronized void setPower(double left, double right){
-        lVictor1.set(left);
-        lVictor2.set(left);
-        rVictor1.set(-right);
-        rVictor2.set(-right);
+        lVictor1.set(left*0.3);
+        lVictor2.set(left*0.3);
+        rVictor1.set(-right*0.3);
+        rVictor2.set(-right*0.3);
     }
     /**
      * sets leftPower to left and rightPower to right
