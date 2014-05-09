@@ -1,18 +1,18 @@
 
-
 package modules;
 
 import Robot.Anaconda;
 import com.sun.squawk.util.MathUtils;
 import config.DriveConfig;
 import edu.wpi.first.wpilibj.*;
+import edu.wpi.first.wpilibj.Joystick;
 /**
  *
  * @author Ben Evans
  * @author Ankith Uppunda
  */
 public class DriveModule extends Module{
-    
+    private Joystick ljoy;
     private Victor lVictor1, lVictor2, rVictor1, rVictor2;
     private Encoder lEncoder, rEncoder;
     private double distancePerPulse;
@@ -46,6 +46,7 @@ public class DriveModule extends Module{
         lVictor2 = new Victor(lv2);
         rVictor1 = new Victor(rv1);
         rVictor2 = new Victor(rv2);
+        ljoy = new Joystick(1);
         
         lEncoder = new Encoder(lenca, lencb);
         rEncoder = new Encoder(renca, rencb);
@@ -162,10 +163,10 @@ public class DriveModule extends Module{
      * @param right 
      */    
     private synchronized void setPower(double left, double right){
-        lVictor1.set(left*0.3);
-        lVictor2.set(left*0.3);
-        rVictor1.set(-right*0.3);
-        rVictor2.set(-right*0.3);
+        lVictor1.set(left*ljoy.getZ());
+        lVictor2.set(left*ljoy.getZ());
+        rVictor1.set(-right*ljoy.getZ());
+        rVictor2.set(-right*ljoy.getZ());
     }
     /**
      * sets leftPower to left and rightPower to right
