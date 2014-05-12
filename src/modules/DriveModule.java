@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.*;
  
  
 public class DriveModule extends Module{
-    private Joystick ljoy;
+
     private Victor lVictor1, lVictor2, rVictor1, rVictor2;
     private Encoder lEncoder, rEncoder;
     private double distancePerPulse;
@@ -164,17 +164,17 @@ public class DriveModule extends Module{
      * @param right 
      */    
     private synchronized void setPower(double left, double right){
-        lVictor1.set(left*speed);
-        lVictor2.set(left*speed);
-        rVictor1.set(-right*speed);
-        rVictor2.set(-right*speed);
+        lVictor1.set(left);
+        lVictor2.set(left);
+        rVictor1.set(-right);
+        rVictor2.set(-right);
     }
     /**
      * sets leftPower to left and rightPower to right
      * @param left
      * @param right 
      */
-    public synchronized void drive(double left, double right, double speedMod){
+    public synchronized void drive(double left, double right){
         
         if(left > 0)
             left = MathUtils.pow(left, pow);
@@ -188,7 +188,7 @@ public class DriveModule extends Module{
         
         leftPower = left;
         rightPower = right;
-        speedMod = speed;
+
     }
     
     public synchronized void setS(double s){
