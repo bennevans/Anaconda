@@ -164,8 +164,8 @@ public class DriveModule extends Module{
      * @param right 
      */    
     private synchronized void setPower(double left, double right){
-        lVictor1.set(left);
-        lVictor2.set(left);
+        lVictor1.set(-left);
+        lVictor2.set(-left);
         rVictor1.set(-right);
         rVictor2.set(-right);
     }
@@ -182,9 +182,9 @@ public class DriveModule extends Module{
             left = -MathUtils.pow(-left, pow);
         
         if(right > 0)
-            right = MathUtils.pow(right, pow);
+            right = MathUtils.pow(-right, pow);
         else
-            right = -MathUtils.pow(-right, pow);
+            right = -MathUtils.pow(right, pow);
         
         leftPower = left;
         rightPower = right;
