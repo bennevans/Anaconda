@@ -56,7 +56,7 @@ public class DriveModule extends Module{
         driveController = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
 
             public double pidGet() {
-                return (lEncoder.getDistance() + rEncoder.getDistance()) / 2.0;
+                return rEncoder.getDistance();//(lEncoder.getDistance() + rEncoder.getDistance()) / 2.0;
             }
             
         }, new PIDOutput() {
@@ -188,6 +188,28 @@ public class DriveModule extends Module{
         rightPower = right;
     }
     
+    public synchronized void arcadeDrive(double power, double angle){
+        double leftMotorOutput = 0, rightMotorOutput = 0;
+        
+        if(power > 0.0){
+            if(angle > 0.0){
+                leftMotorOutput = power-angle;
+                rightMotorOutput = Math.max(power, angle);
+            }else{
+                leftMotorOutput = Math.max(power, -angle);
+                rightMotorOutput = power + angle;      
+            }
+        }else{
+            if(angle > 0.0){
+                leftMotorOutput = -Math.max(-power, angle);
+                rightMotorOutput = power + angle;
+            }else{
+                leftMotorOutput = power- angle;
+                rightMotorOutput = -Math.max(-power, -angle);      
+            }
+        }
+    }
+    
     public synchronized void setS(double s){
         this.s = s;
     }
@@ -223,6 +245,10 @@ public class DriveModule extends Module{
         String line4 = "\t\t<data name=\"rightEncoder\" value=\""+rEncoder.get()+"\">\n";
         String line5123445454 = "\t\t<data name=\"gear\" value=\""+(gear.get() ? "HIGH" : "LOW")+"\">";
         return line1+line2+line3+line4+line5123445454;
+    }
+    
+    public boolean getGear(){
+        return gear.get();
     }
     
     /**

@@ -74,7 +74,12 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_INPUT_MAX + ArmConfig.ARM_INPUT_MIN) * KM );
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ArmConfig.ARM_MED_CONST + ArmConfig.ARM_INPUT_MIN);
+    }
+    
+    public synchronized void setArmPercent(double percent){
+                     setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * percent + ArmConfig.ARM_INPUT_MIN);
+
     }
     
     public synchronized void setTrussPostition(){

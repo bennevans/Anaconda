@@ -250,6 +250,11 @@ public class Anaconda extends IterativeRobot {
             }
         }
         
+        if(rJoy.getTrigger() && lJoy.getTrigger()){
+            shooterModule.setManual(false);
+            shooterModule.shoot();
+        }
+        
 //        
 //        if(dshootCounter % 4 == 0){
 //            shooterModule.setManual(true);
@@ -280,6 +285,7 @@ public class Anaconda extends IterativeRobot {
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
             driverStation.println(DriverStationLCD.Line.kUser2, 1, "Comp: " + !compressorModule.isPressureSwitchPressed());
             driverStation.println(DriverStationLCD.Line.kUser3, 1, "Winched: " + shooterModule.isButtonPressed());
+            driverStation.println(DriverStationLCD.Line.kUser4, 1, "High Gear: " + driveModule.getGear());
             driverStation.updateLCD();
         }
         infoCounter++;
@@ -290,7 +296,7 @@ public class Anaconda extends IterativeRobot {
     }
     
     public void testInit(){
-        armModule.enable();
+        armModule.disable();
         driveModule.disable();
         driveModule.setAutoModeOn();
         shooterModule.disable(); 
@@ -299,100 +305,12 @@ public class Anaconda extends IterativeRobot {
     }
     
     int testCounter = 0;
-    int tshootCounter = 0;
-    boolean tlastShoot = false;
-    double testD = 0, testI = 0;
     
     public void testPeriodic(){
-        
-//        if(rJoy.getTrigger()){
-//            armModule.enable();
-//            armModule.setPosition(1.96);
-//        }else{
-//            armModule.setPosition(3.9);
-//            armModule.disable();
-//            armModule.setArmPower(rJoy.getY());
-//        }
-        
-//        driveModule.setStraightConstant(rJoy.getZ() + 1);
-        if(true){
-
-
-            if(xbox.getLB() && xbox.getRB()){
-                shooterModule.setManual(false);
-                shooterModule.shoot();
-            }
-            
-
-            if(lJoy.getRawButton(9))
-                testD += 0.01;
-            else if(lJoy.getRawButton(8)){
-                testD -= 0.01;
-                if(testD < 0)
-                    testD = 0;
-            }
-
-            if(lJoy.getRawButton(11))
-                testI += 0.001;
-            else if(lJoy.getRawButton(10)){
-                testI -= 0.001;
-                if(testI < 0)
-                    testI = 0;
-            }
-            
-            
-            armModule.setPID((lJoy.getZ()+1), testI, testD);
-
-            if(rJoy.getTrigger())
-                armModule.setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ((rJoy.getZ() + 1)/2.0) + ArmConfig.ARM_INPUT_MIN);
-            else
-                armModule.setPosition(ArmConfig.ARM_INPUT_MAX);
-        }else if(false){
-            driveModule.setS((rJoy.getZ() + 1) /2.0);
-            if(rJoy.getTrigger()){
-                driveModule.setSetpoint(10);
-            }else{
-                driveModule.setSetpoint(0);
-            }
-        }else if(false){
-            armModule.setMedConstant((lJoy.getZ() + 1) / 2.0);
-            armModule.setMedPosition();
-        }else if(false){
-            armModule.setTrussPostition();
-            armModule.setTrussConstant((rJoy.getZ() + 1) / 2);
-            
-            if(tlastShoot != xbox.getRB())
-                tshootCounter++;
-            tlastShoot = xbox.getRB();
-
-//            if(tshootCounter % 4 == 0){
-//                shooterModule.setManual(true);
-//            }else if(tshootCounter % 2 == 0){
-//                if(xbox.getLB() && !shooterModule.isShooting()){
-//                    System.out.println("XBOX SHOOT");
-//                    shooterModule.setManual(false);
-//                    shooterModule.shoot();
-//                }                    
-//                tshootCounter += 2;
-//            }
-
-            if(xbox.getLB() && xbox.getRB()){
-                shooterModule.setManual(false);
-                shooterModule.shoot();
-                shooterModule.setManual(true);
-            }
-            
-        }else if(false){
-            armModule.setArmPower(rJoy.getZ()/2.0);
-        }else{
-            armModule.setArmPower(0);
-        }
-        
+                
         if(testCounter % 20 == 0){
-//            System.out.println(armModule);        
             System.out.println(armModule);
         }
-//        armModule.setPID((rJoy.getZ()+1), 0.0075, (lJoy.getZ() + 1)*7);
         
         testCounter++;
         
