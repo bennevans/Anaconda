@@ -21,7 +21,7 @@ public class ArmModule extends Module implements PIDOutput {
     private Victor roller, arm;
     
     private double armPower = 0, setPoint;
-    private double KM = ArmConfig.ARM_MED_CONST, KT = ArmConfig.ARM_TRUSS_CONST;
+//    private double KM = ArmConfig.ARM_MED_CONST, KT = ArmConfig.ARM_TRUSS_CONST;
     
     /**
      *  Constructor for ArmModule
@@ -77,12 +77,11 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setArmPercent(double percent){
-                     setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * percent + ArmConfig.ARM_INPUT_MIN);
-
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * percent + ArmConfig.ARM_INPUT_MIN);
     }
     
     public synchronized void setTrussPostition(){
-        setPosition((ArmConfig.ARM_INPUT_MAX + ArmConfig.ARM_INPUT_MIN) * KT);
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ArmConfig.ARM_TOBY_CONST + ArmConfig.ARM_INPUT_MAX);
     }
     
     public synchronized void setLowGoalPosition(){
@@ -135,22 +134,7 @@ public class ArmModule extends Module implements PIDOutput {
     public synchronized double getPotValue(){
         return pot.get();
     }
-    
-    public synchronized void setMedConstant(double k){
-        this.KM = k;
-    }
-    
-    public synchronized double getMedConstant(){
-        return KM;
-    }
-    
-    public synchronized void setTrussConstant(double t){
-        this.KT = t;
-    }
-    
-    public synchronized double getTrussConstant(){
-        return KT;
-    }
+ 
     
     /**
      * toString for ArmModule 

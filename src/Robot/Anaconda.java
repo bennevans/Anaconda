@@ -255,9 +255,10 @@ public class Anaconda extends IterativeRobot {
             System.out.println(armModule);
             driverStation.clear();
             driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
-            driverStation.println(DriverStationLCD.Line.kUser2, 1, "Comp: " + !compressorModule.isPressureSwitchPressed());
+            driverStation.println(DriverStationLCD.Line.kUser2, 1, "Compressed: " + !compressorModule.isPressureSwitchPressed());
             driverStation.println(DriverStationLCD.Line.kUser3, 1, "Winched: " + shooterModule.isButtonPressed());
             driverStation.println(DriverStationLCD.Line.kUser4, 1, "High Gear: " + driveModule.getGear());
+            driverStation.println(DriverStationLCD.Line.kUser5, 1, "Drive Mode: " + (driveModeCounter % 4 == 0 ? "Tank" : "Arcade"));
             driverStation.updateLCD();
         }
         infoCounter++;
