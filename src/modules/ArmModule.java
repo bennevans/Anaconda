@@ -65,7 +65,6 @@ public class ArmModule extends Module implements PIDOutput {
     }
     
     public synchronized void setLowPosition(){
-        //TODO: fix this
         setPosition(ArmConfig.ARM_INPUT_MAX);
     }
     

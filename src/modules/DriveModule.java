@@ -19,7 +19,6 @@ public class DriveModule extends Module{
     private double leftPower = 0, rightPower = 0;
     private Solenoid gear;
     
-//    private PIDController lcont, rcont, scont;
     private PIDController driveController;
     private double s = 1;
     private double setpoint = 0;
@@ -68,50 +67,6 @@ public class DriveModule extends Module{
             }
         });
                 
-//       ultrasonic = new AnalogChannel(DriveConfig.ULTRASONIC_PORT);
-//       ultrasonic.get
-//        
-//        lcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
-//
-//            public double pidGet() {
-//                return lEncoder.getDistance();
-//            }
-//        }, new PIDOutput() {
-//
-//            public void pidWrite(double d) {
-//                lVictor1.set(d + s);
-//                lVictor2.set(d + s);
-//            }
-//        });
-//        
-//        rcont = new PIDController(DriveConfig.KP, DriveConfig.KI, DriveConfig.KD, new PIDSource() {
-//
-//            public double pidGet() {
-//                return rEncoder.getDistance();
-//            }
-//        }, new PIDOutput() {
-//
-//            public void pidWrite(double d) {
-//                rVictor1.set(-d + s);
-//                rVictor2.set(-d + s);
-//            }
-//        });
-//        
-//        scont = new PIDController(DriveConfig.KSP, DriveConfig.KSI, DriveConfig.KSD, new PIDSource() {
-//
-//            public double pidGet() {
-//                return 
-//            }
-//        }, new PIDOutput() {
-//
-//            public void pidWrite(double d) {
-//                s = d;
-//            }
-//        });
-//        
-//        lcont.setOutputRange(-0.5, 0.5);
-//        rcont.setOutputRange(-0.5, 0.5);
-        
         driveController.setOutputRange(-0.5, 0.5);
         s = DriveConfig.KS;
     }
@@ -127,8 +82,6 @@ public class DriveModule extends Module{
     }
     
     public synchronized void disablePID(){
-//        lcont.disable();
-//        rcont.disable();
         driveController.disable();
     }
     
@@ -151,8 +104,6 @@ public class DriveModule extends Module{
      */    
     public void reset(){
         resetEncoders();
-//        lcont.reset();
-//        rcont.reset();
         driveController.reset();
         setpoint = 0;
     }
@@ -268,18 +219,9 @@ public class DriveModule extends Module{
                 
                 if(autoMode){
                     setGear(false);
-//                    updateS();
-//                    lcont.enable();
-//                    rcont.enable();
-//                    lcont.setSetpoint(setpoint);
-//                    rcont.setSetpoint(setpoint);
                     driveController.enable();
                     driveController.setSetpoint(setpoint);
                 }else{
-//                    lcont.disable();
-//                    rcont.disable();
-//                    lcont.setSetpoint(0);
-//                    rcont.setSetpoint(0);
                     driveController.disable();
                     driveController.reset();
                     setPower(leftPower, rightPower);
@@ -294,18 +236,7 @@ public class DriveModule extends Module{
         }
     }
         
-//    public synchronized void updateS(){
-//        error = lcont.get() - rcont.get();
-//        s = error * ks;
-//    }
-//    
-//    public synchronized void setStraightConstant(double ks){
-//        this.ks = ks;
-//    }
-    
     public synchronized void setPID(double p, double i, double d){
-//        lcont.setPID(p, i, d);
-//        rcont.setPID(p, i, d);
         driveController.setPID(p, i, d);
     }
     
