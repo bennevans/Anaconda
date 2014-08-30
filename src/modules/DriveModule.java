@@ -208,6 +208,8 @@ public class DriveModule extends Module{
                 rightMotorOutput = -Math.max(-power, -angle);      
             }
         }
+        
+        drive(leftMotorOutput, rightMotorOutput);
     }
     
     public synchronized void setS(double s){

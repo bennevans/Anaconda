@@ -188,13 +188,10 @@ public class Anaconda extends IterativeRobot {
 
     int infoCounter = 0;
     
-    int shootCounter = 0;
-    boolean lastShoot = false;
-    
-//    int dshootCounter = 0;
-//    boolean dlastShoot = false;
-    
     boolean gear = false;
+    
+    int driveModeCounter = 0;
+    boolean lastDriveMode = false;
     
     public void teleopPeriodic(){
         
@@ -203,13 +200,17 @@ public class Anaconda extends IterativeRobot {
         else if(rJoy.getRawButton(4))
             gear = false;
         
+        if(lJoy.getRawButton(7) != lastDriveMode)
+            driveModeCounter++;
+        lastDriveMode =lJoy.getRawButton(7);
+        
+        if(driveModeCounter % 4 == 0)
+            driveModule.drive(-lJoy.getY(), -rJoy.getY());
+        else
+            driveModule.arcadeDrive(-lJoy.getY(), -rJoy.getX());
+        
         driveModule.setGear(gear);
         
-//        driveModule.setDriveExponent((lJoy.getZ() + 1)*2);
-        
-        
-        
-        driveModule.drive(-lJoy.getY(), -rJoy.getY());
                 
         armModule.setRoller(xbox.getLY());
         shooterModule.setIntake(xbox.getStart());
@@ -221,24 +222,6 @@ public class Anaconda extends IterativeRobot {
         else
             shooterModule.setWinchPower(0);
          
-        if(lastShoot != xbox.getRB())
-            shootCounter++;
-        lastShoot = xbox.getRB();
-        
-//        if(dlastShoot != rJoy.getTrigger())
-//            dshootCounter++;
-//        dlastShoot = rJoy.getTrigger();
-        
-//        if(shootCounter % 4 == 0){
-//            shooterModule.setManual(true);
-//        }else if(shootCounter % 2 == 0){
-//            if(xbox.getLB() && !shooterModule.isShooting()){
-//                System.out.println("XBOX SHOOT");
-//                shooterModule.setManual(false);
-//                shooterModule.shoot();
-//            }                    
-//            shootCounter += 2;
-//        }
         
         if(xbox.getLB()){
             if(xbox.getRB()){
@@ -255,17 +238,6 @@ public class Anaconda extends IterativeRobot {
             shooterModule.shoot();
         }
         
-//        
-//        if(dshootCounter % 4 == 0){
-//            shooterModule.setManual(true);
-//        }else if(dshootCounter % 2 == 0){
-//            if(lJoy.getTrigger() && !shooterModule.isShooting()){
-//                System.out.println("JOYSTICK SHOOT");
-//                shooterModule.setManual(false);
-//                shooterModule.shoot();
-//            }                    
-//            dshootCounter += 2;
-//        }
         
         if(xbox.getB())
             armModule.setMedPosition();
