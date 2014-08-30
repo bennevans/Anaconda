@@ -152,7 +152,7 @@ public class Anaconda extends IterativeRobot {
             Timer.delay(1);
             //Move forward
             System.out.println("Moving");
-            driveModule.setSetpoint(11.5);
+            driveModule.setSetpoint(11.5/2+0.5);
             Timer.delay(5);
 
             //shoot
@@ -185,11 +185,10 @@ public class Anaconda extends IterativeRobot {
     }
 
     int infoCounter = 0;
-    
     boolean gear = false;
-    
     int driveModeCounter = 0;
     boolean lastDriveMode = false;
+    double armPercent = 0;
     
     public void teleopPeriodic(){
         
@@ -249,6 +248,12 @@ public class Anaconda extends IterativeRobot {
         if(xbox.getXb()){
             //armModule.setArmPercent((lJoy.getZ() + 1)/2.0);
             armModule.setTrussPostition();
+        }
+        
+        if(xbox.getBack()){
+            armPercent = armModule.getArmConstant();
+            armPercent += xbox.getRY() / 100;
+            armModule.setArmPercent(armPercent);
         }
         
         if(infoCounter % 5 == 0){
