@@ -19,6 +19,7 @@ public class ArmModule extends Module implements PIDOutput {
     private PIDController controller;
     private Potentiometer pot;
     private Victor roller, arm;
+    private double constant = 0;
     
     private double armPower = 0, setPoint;
 //    private double KM = ArmConfig.ARM_MED_CONST, KT = ArmConfig.ARM_TRUSS_CONST;
@@ -61,35 +62,44 @@ public class ArmModule extends Module implements PIDOutput {
      */
     public synchronized void setPosition(double setposition)
     {
+        if(setposition < ArmConfig.ARM_INPUT_MIN)
+            setposition = ArmConfig.ARM_INPUT_MIN;
+        else if(setposition > ArmConfig.ARM_INPUT_MAX)
+            setposition = ArmConfig.ARM_INPUT_MAX;
        this.setPoint = setposition;
     }
     
     public synchronized void setLowPosition(){
         setPosition(ArmConfig.ARM_INPUT_MAX);
+        constant = 1;
     }
     
     public synchronized void setHighPosition(){
         setPosition(ArmConfig.ARM_INPUT_MIN);
+        constant = 0;
     }
     
     public synchronized void setMedPosition(){
-        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ArmConfig.ARM_MED_CONST + ArmConfig.ARM_INPUT_MIN);
+        constant = ArmConfig.ARM_MED_CONST;
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * constant + ArmConfig.ARM_INPUT_MIN);
     }
     
     public synchronized void setArmPercent(double percent){
-        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * percent + ArmConfig.ARM_INPUT_MIN);
+        constant = percent;
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * constant + ArmConfig.ARM_INPUT_MIN);
     }
     
     public synchronized void setTrussPostition(){
-        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * ArmConfig.ARM_TOBY_CONST + ArmConfig.ARM_INPUT_MAX);
-    }
-    
-    public synchronized void setLowGoalPosition(){
-        setPosition((ArmConfig.ARM_INPUT_MIN + ArmConfig.ARM_INPUT_MAX)/ 3.0);
+        constant = ArmConfig.ARM_TOBY_CONST;
+        setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * constant + ArmConfig.ARM_INPUT_MIN);
     }
     
     public synchronized void setArmPower(double armPower){
         this.armPower = armPower;
+    }
+    
+    public synchronized double getArmConstant(){
+        return constant;
     }
     
     /**
@@ -141,7 +151,7 @@ public class ArmModule extends Module implements PIDOutput {
      * @return current field values as a string
      */
     public String toString(){
-        return "P: " + controller.getP() + " I: " + controller.getI() + " D: " + controller.getD() + " M: " + getMedConstant() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
+        return "P: " + controller.getP() + " I: " + controller.getI() + " D: " + controller.getD() + " Arm: " + arm.get() + " Setpoint: " + controller.getSetpoint() + " Roller Value: " + roller.get() + " Pot Value: " + pot.get() + " PID error: " + controller.getError();
     }
 
     /**

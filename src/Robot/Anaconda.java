@@ -116,8 +116,6 @@ public class Anaconda extends IterativeRobot {
         armModule.disable();
         armModule.setPID(ArmConfig.p, ArmConfig.i, ArmConfig.d);
         armModule.setPosition(ArmConfig.ARM_INPUT_MIN);
-        armModule.setMedConstant(ArmConfig.ARM_MED_CONST);
-//        driveModule.setStraightConstant(DriveConfig.KS);
     }
 
     public void reset(){
@@ -248,13 +246,15 @@ public class Anaconda extends IterativeRobot {
         if(xbox.getYb())
             armModule.setHighPosition();
         
-        if(xbox.getXb())
+        if(xbox.getXb()){
+            //armModule.setArmPercent((lJoy.getZ() + 1)/2.0);
             armModule.setTrussPostition();
+        }
         
         if(infoCounter % 5 == 0){
             System.out.println(armModule);
             driverStation.clear();
-            driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent());
+            driverStation.println(DriverStationLCD.Line.kUser1, 1, "Exp: " + driveModule.getDriveExponent() + " Per: " + armModule.getArmConstant());
             driverStation.println(DriverStationLCD.Line.kUser2, 1, "Compressed: " + !compressorModule.isPressureSwitchPressed());
             driverStation.println(DriverStationLCD.Line.kUser3, 1, "Winched: " + shooterModule.isButtonPressed());
             driverStation.println(DriverStationLCD.Line.kUser4, 1, "High Gear: " + driveModule.getGear());

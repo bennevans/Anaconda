@@ -19,5 +19,5 @@ public class ArmConfig {
    public static final double ARM_OUTPUT_MIN = -0.75, ARM_OUTPUT_MAX = 0.75;
    
    public static final double ARM_MED_CONST = 0.25;//0.35;
-   public static final double ARM_TOBY_CONST = 0.3;
+   public static final double ARM_TOBY_CONST = 0.38;
 }
