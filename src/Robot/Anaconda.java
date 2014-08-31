@@ -146,6 +146,7 @@ public class Anaconda extends IterativeRobot {
         
         
         if(true){
+            armModule.setRoller(-0.3);
 
             System.out.println("Setting arm");
             armModule.setMedPosition();
@@ -154,18 +155,10 @@ public class Anaconda extends IterativeRobot {
             System.out.println("Moving");
             driveModule.setSetpoint(11.5/2+0.5);
             Timer.delay(5);
-
+            armModule.setRoller(0.0);
             //shoot
             System.out.println("Shooting");
             shooterModule.shoot();
-        }else{
-            armModule.setHighPosition();
-            driveModule.setSetpoint(12);
-            Timer.delay(5);
-            driveModule.setAutoModeOff();
-            driveModule.drive(0.2, 0.2);
-            Timer.delay(3);
-            armModule.setRoller(1);
         }
     }
 
