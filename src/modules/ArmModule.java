@@ -79,6 +79,7 @@ public class ArmModule extends Module implements PIDOutput {
         constant = 0;
     }
     
+    //ryan and jonas change this
     public synchronized void setMedPosition(){
         constant = ArmConfig.ARM_MED_CONST;
         setPosition((ArmConfig.ARM_INPUT_MAX - ArmConfig.ARM_INPUT_MIN) * constant + ArmConfig.ARM_INPUT_MIN);

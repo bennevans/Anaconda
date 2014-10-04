@@ -211,7 +211,7 @@ public class DriveModule extends Module{
         while(true){
             
             if(counter % 20 == 1 && Robot.Anaconda.getInstance().isAutonomous()){
-                System.out.println(toString());           
+                //System.out.println(toString());           
             }
             counter++;
             

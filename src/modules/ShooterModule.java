@@ -19,7 +19,7 @@ public class ShooterModule extends Module{
     private Victor winch1, winch2;
     private DigitalInput winchSensor;
     
-    private boolean manual = true;
+    private volatile boolean manual = true;
     private double winchPower = 0;
     private boolean shifterGear = true, lifterState = false;
     boolean shoot = false, tobyShoot = false;
@@ -127,24 +127,37 @@ public class ShooterModule extends Module{
     public void run(){
         
         while(true){
-            
-            
-            
+                        
             if(winchPower > 0 && isButtonPressed()){
                 winchPower = 0;
             }
 
             if(enabled){
                 
+                System.out.println("Enabled");
+                        
+                System.out.println("SHOOTER: " + winchPower);
+
+                
                 if(manual){
+                    
+                    System.out.println("Manual");
                     
                     lifter.set(lifterState);
                     winch1.set(winchPower);
                     winch2.set(winchPower);
+                    
+                    
                 }else if(shoot){
+                    System.out.println("BSHOOT");
                     bShoot();
                 }else if(tobyShoot){
+                    System.out.println("TSHOOT");
                     tShoot();
+                }else{
+                    System.out.println("NO STATE");
+                    winch1.set(0);
+                    winch2.set(0);
                 }
             }
             

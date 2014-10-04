@@ -145,21 +145,29 @@ public class Anaconda extends IterativeRobot {
         driveModule.setS(.95);
         
         
-        if(true){
-            armModule.setRoller(-0.3);
+        System.out.println("***************************Autonomous*************************");
 
-            System.out.println("Setting arm");
-            armModule.setMedPosition();
-            Timer.delay(1);
-            //Move forward
-            System.out.println("Moving");
-            driveModule.setSetpoint(11.5/2+0.5);
-            Timer.delay(5);
-            armModule.setRoller(0.0);
-            //shoot
-            System.out.println("Shooting");
-            shooterModule.shoot();
+        
+        armModule.setRoller(0.3);
+        shooterModule.setManual(true);
+        while(!shooterModule.isButtonPressed()){
+            shooterModule.setWinchPower(1);
         }
+        System.out.println("*********SETTING WINCH POWER**********************");
+        shooterModule.setWinchPower(0);
+        shooterModule.setManual(false);
+        
+        System.out.println("Moving Arm");
+        
+        armModule.setMedPosition();
+        Timer.delay(1);
+        
+        System.out.println("Moving");
+        driveModule.setSetpoint(11.25);
+        Timer.delay(3);
+        System.out.println("shooting");
+        shooterModule.shoot();
+        
     }
 
     public void autonomousPeriodic(){
@@ -175,6 +183,7 @@ public class Anaconda extends IterativeRobot {
         compressorModule.enable();
         driveModule.disablePID();
         driveModule.setAutoModeOff();
+        armModule.setRoller(0);
     }
 
     int infoCounter = 0;
